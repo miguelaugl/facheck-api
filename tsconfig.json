@@ -3,6 +3,14 @@
     "outDir": "./dist",
     "module": "CommonJS",
     "target": "ES2019",
-    "esModuleInterop": true
-  }
+    "esModuleInterop": true,
+    "rootDir": "src",
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"]
+    }
+  },
+  "include": [
+    "src"
+  ]
 }
