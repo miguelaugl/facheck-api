@@ -37,6 +37,7 @@ describe('SignUp Controller', () => {
         passwordConfirmation: 'any_password',
         ra: 'any_ra',
         course: 'any_course',
+        cpf: 'any_cpf',
       },
     }
     const httpResponse = await sut.handle(httpRequest)
@@ -53,6 +54,7 @@ describe('SignUp Controller', () => {
         passwordConfirmation: 'any_password',
         ra: 'any_ra',
         course: 'any_course',
+        cpf: 'any_cpf',
       },
     }
     const httpResponse = await sut.handle(httpRequest)
@@ -69,6 +71,7 @@ describe('SignUp Controller', () => {
         passwordConfirmation: 'any_password',
         ra: 'any_ra',
         course: 'any_course',
+        cpf: 'any_cpf',
       },
     }
     const httpResponse = await sut.handle(httpRequest)
@@ -85,6 +88,7 @@ describe('SignUp Controller', () => {
         password: 'any_password',
         ra: 'any_ra',
         course: 'any_course',
+        cpf: 'any_cpf',
       },
     }
     const httpResponse = await sut.handle(httpRequest)
@@ -101,6 +105,7 @@ describe('SignUp Controller', () => {
         password: 'any_password',
         passwordConfirmation: 'any_password',
         course: 'any_course',
+        cpf: 'any_cpf',
       },
     }
     const httpResponse = await sut.handle(httpRequest)
@@ -117,11 +122,29 @@ describe('SignUp Controller', () => {
         password: 'any_password',
         passwordConfirmation: 'any_password',
         ra: 'any_ra',
+        cpf: 'any_cpf',
       },
     }
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(HttpStatusCode.BAD_REQUEST)
     expect(httpResponse.body).toEqual(new MissingParamError('course'))
+  })
+
+  it('should return 400 if no cpf is provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password',
+        ra: 'any_ra',
+        course: 'any_course',
+      },
+    }
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(HttpStatusCode.BAD_REQUEST)
+    expect(httpResponse.body).toEqual(new MissingParamError('cpf'))
   })
 
   it('should return 400 if password confirmation fails', async () => {
@@ -134,6 +157,7 @@ describe('SignUp Controller', () => {
         passwordConfirmation: 'invalid_password',
         ra: 'any_ra',
         course: 'any_course',
+        cpf: 'any_cpf',
       },
     }
     const httpResponse = await sut.handle(httpRequest)
@@ -152,6 +176,7 @@ describe('SignUp Controller', () => {
         passwordConfirmation: 'any_password',
         ra: 'any_ra',
         course: 'any_course',
+        cpf: 'any_cpf',
       },
     }
     const httpResponse = await sut.handle(httpRequest)
@@ -170,6 +195,7 @@ describe('SignUp Controller', () => {
         passwordConfirmation: 'any_password',
         ra: 'any_ra',
         course: 'any_course',
+        cpf: 'any_cpf',
       },
     }
     await sut.handle(httpRequest)
@@ -187,6 +213,7 @@ describe('SignUp Controller', () => {
         passwordConfirmation: 'any_password',
         ra: 'any_ra',
         course: 'any_course',
+        cpf: 'any_cpf',
       },
     }
     const httpResponse = await sut.handle(httpRequest)
