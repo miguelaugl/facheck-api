@@ -1,3 +1,4 @@
+import { AddAccount } from '@/domain/usecases'
 import { CpfValidator, EmailValidator } from '@/validation/protocols'
 
 import { InvalidParamError, MissingParamError } from '../errors'
@@ -8,6 +9,7 @@ export class SignUpController implements Controller {
   constructor (
     private readonly emailValidator: EmailValidator,
     private readonly cpfValidator: CpfValidator,
+    private readonly addAccount: AddAccount,
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -18,7 +20,7 @@ export class SignUpController implements Controller {
           return badRequest(new MissingParamError(field))
         }
       }
-      const { email, password, passwordConfirmation, cpf } = httpRequest.body
+      const { name, email, password, passwordConfirmation, cpf, ra, course } = httpRequest.body
       if (password !== passwordConfirmation) {
         return badRequest(new InvalidParamError('passwordConfirmation'))
       }
@@ -30,6 +32,14 @@ export class SignUpController implements Controller {
       if (!isCpfValid) {
         return badRequest(new InvalidParamError('cpf'))
       }
+      await this.addAccount.add({
+        name,
+        course,
+        cpf,
+        email,
+        password,
+        ra,
+      })
     } catch (error) {
       return serverError(error)
     }
