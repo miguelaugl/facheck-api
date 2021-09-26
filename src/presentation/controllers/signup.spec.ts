@@ -1,3 +1,5 @@
+import { AccountModel } from '@/domain/models'
+import { AddAccount, AddAccountModel } from '@/domain/usecases'
 import { CpfValidator, EmailValidator } from '@/validation/protocols'
 
 import { InvalidParamError, MissingParamError, ServerError } from '../errors'
@@ -8,6 +10,24 @@ type SutTypes = {
   sut: SignUpController
   emailValidatorStub: EmailValidator
   cpfValidatorStub: CpfValidator
+  addAccountStub: AddAccount
+}
+
+const makeAddAccount = (): AddAccount => {
+  class AddAccountStub implements AddAccount {
+    async add (account: AddAccountModel): Promise<AccountModel> {
+      return {
+        id: 'valid_id',
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: 'valid_password',
+        ra: 'valid_ra',
+        course: 'valid_course',
+        cpf: 'valid_cpf',
+      }
+    }
+  }
+  return new AddAccountStub()
 }
 
 const makeCpfValidator = (): CpfValidator => {
@@ -31,11 +51,13 @@ const makeEmailValidator = (): EmailValidator => {
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator()
   const cpfValidatorStub = makeCpfValidator()
-  const sut = new SignUpController(emailValidatorStub, cpfValidatorStub)
+  const addAccountStub = makeAddAccount()
+  const sut = new SignUpController(emailValidatorStub, cpfValidatorStub, addAccountStub)
   return {
     sut,
     emailValidatorStub,
     cpfValidatorStub,
+    addAccountStub,
   }
 }
 
@@ -287,5 +309,30 @@ describe('SignUp Controller', () => {
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(HttpStatusCode.SERVER_ERROR)
     expect(httpResponse.body).toEqual(new ServerError('stack'))
+  })
+
+  it('should call AddAccount with correct values', async () => {
+    const { sut, addAccountStub } = makeSut()
+    const addSpy = jest.spyOn(addAccountStub, 'add')
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password',
+        ra: 'any_ra',
+        course: 'any_course',
+        cpf: 'any_cpf',
+      },
+    }
+    await sut.handle(httpRequest)
+    expect(addSpy).toHaveBeenCalledWith({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password',
+      ra: 'any_ra',
+      course: 'any_course',
+      cpf: 'any_cpf',
+    })
   })
 })
