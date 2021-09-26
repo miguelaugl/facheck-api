@@ -1,19 +1,14 @@
-import { MissingParamError } from '../errors/missing-param-error'
-import { HttpRequest, HttpResponse, HttpStatusCode } from '../protocols'
+import { MissingParamError } from '../errors'
+import { badRequest } from '../helpers'
+import { HttpRequest, HttpResponse } from '../protocols'
 
 export class SignUpController {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     if (!httpRequest.body.name) {
-      return {
-        statusCode: HttpStatusCode.BAD_REQUEST,
-        body: new MissingParamError('name'),
-      }
+      return badRequest(new MissingParamError('name'))
     }
     if (!httpRequest.body.email) {
-      return {
-        statusCode: HttpStatusCode.BAD_REQUEST,
-        body: new MissingParamError('email'),
-      }
+      return badRequest(new MissingParamError('email'))
     }
   }
 }

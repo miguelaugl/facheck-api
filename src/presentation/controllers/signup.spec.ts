@@ -1,4 +1,4 @@
-import { MissingParamError } from '../errors/missing-param-error'
+import { MissingParamError } from '../errors'
 import { HttpStatusCode } from '../protocols/http'
 import { SignUpController } from './signup'
 
