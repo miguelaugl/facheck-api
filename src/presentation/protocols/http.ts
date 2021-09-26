@@ -1,5 +1,6 @@
 export enum HttpStatusCode {
-  BAD_REQUEST = 400
+  BAD_REQUEST = 400,
+  SERVER_ERROR = 500
 }
 
 export type HttpResponse = {
