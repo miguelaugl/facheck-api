@@ -1,4 +1,4 @@
-import { EmailValidator } from '@/validation/protocols'
+import { CpfValidator, EmailValidator } from '@/validation/protocols'
 
 import { InvalidParamError, MissingParamError, ServerError } from '../errors'
 import { HttpStatusCode } from '../protocols/http'
@@ -7,6 +7,16 @@ import { SignUpController } from './signup'
 type SutTypes = {
   sut: SignUpController
   emailValidatorStub: EmailValidator
+  cpfValidatorStub: CpfValidator
+}
+
+const makeCpfValidator = (): CpfValidator => {
+  class CpfValidatorStub implements CpfValidator {
+    isValid (cpf: string): boolean {
+      return true
+    }
+  }
+  return new CpfValidatorStub()
 }
 
 const makeEmailValidator = (): EmailValidator => {
@@ -20,10 +30,12 @@ const makeEmailValidator = (): EmailValidator => {
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator()
-  const sut = new SignUpController(emailValidatorStub)
+  const cpfValidatorStub = makeCpfValidator()
+  const sut = new SignUpController(emailValidatorStub, cpfValidatorStub)
   return {
     sut,
     emailValidatorStub,
+    cpfValidatorStub,
   }
 }
 
@@ -219,5 +231,24 @@ describe('SignUp Controller', () => {
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(HttpStatusCode.SERVER_ERROR)
     expect(httpResponse.body).toEqual(new ServerError('stack'))
+  })
+
+  it('should return 400 if an invalid cpf is provided', async () => {
+    const { sut, cpfValidatorStub } = makeSut()
+    jest.spyOn(cpfValidatorStub, 'isValid').mockReturnValueOnce(false)
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password',
+        ra: 'any_ra',
+        course: 'any_course',
+        cpf: 'invalid_cpf',
+      },
+    }
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(HttpStatusCode.BAD_REQUEST)
+    expect(httpResponse.body).toEqual(new InvalidParamError('cpf'))
   })
 })
