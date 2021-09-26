@@ -1,3 +1,4 @@
+import { HttpStatusCode } from '../protocols/http'
 import { SignUpController } from './signup'
 
 describe('SignUp Controller', () => {
@@ -11,7 +12,7 @@ describe('SignUp Controller', () => {
       },
     }
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.statusCode).toBe(HttpStatusCode.BAD_REQUEST)
     expect(httpResponse.body).toEqual(new Error('Missing param: name'))
   })
 
@@ -25,7 +26,7 @@ describe('SignUp Controller', () => {
       },
     }
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.statusCode).toBe(HttpStatusCode.BAD_REQUEST)
     expect(httpResponse.body).toEqual(new Error('Missing param: email'))
   })
 })
