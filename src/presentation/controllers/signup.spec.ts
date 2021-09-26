@@ -269,4 +269,23 @@ describe('SignUp Controller', () => {
     await sut.handle(httpRequest)
     expect(isValidSpy).toHaveBeenCalledWith('any_cpf')
   })
+
+  it('should return 500 if CpfValidator throws', async () => {
+    const { sut, cpfValidatorStub } = makeSut()
+    jest.spyOn(cpfValidatorStub, 'isValid').mockImplementationOnce(() => { throw new Error() })
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'invalid_email',
+        password: 'any_password',
+        passwordConfirmation: 'any_password',
+        ra: 'any_ra',
+        course: 'any_course',
+        cpf: 'any_cpf',
+      },
+    }
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(HttpStatusCode.SERVER_ERROR)
+    expect(httpResponse.body).toEqual(new ServerError('stack'))
+  })
 })
