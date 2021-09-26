@@ -251,4 +251,22 @@ describe('SignUp Controller', () => {
     expect(httpResponse.statusCode).toBe(HttpStatusCode.BAD_REQUEST)
     expect(httpResponse.body).toEqual(new InvalidParamError('cpf'))
   })
+
+  it('should call CpfValidator with correct cpf', async () => {
+    const { sut, cpfValidatorStub } = makeSut()
+    const isValidSpy = jest.spyOn(cpfValidatorStub, 'isValid')
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password',
+        ra: 'any_ra',
+        course: 'any_course',
+        cpf: 'any_cpf',
+      },
+    }
+    await sut.handle(httpRequest)
+    expect(isValidSpy).toHaveBeenCalledWith('any_cpf')
+  })
 })
