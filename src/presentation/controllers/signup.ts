@@ -32,7 +32,7 @@ export class SignUpController implements Controller {
       if (!isCpfValid) {
         return badRequest(new InvalidParamError('cpf'))
       }
-      await this.addAccount.add({
+      const account = await this.addAccount.add({
         name,
         course,
         cpf,
@@ -40,6 +40,10 @@ export class SignUpController implements Controller {
         password,
         ra,
       })
+      return {
+        statusCode: 200,
+        body: account,
+      }
     } catch (error) {
       return serverError(error)
     }
