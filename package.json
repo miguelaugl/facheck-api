@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "lint": "eslint 'src/**'"
+  },
   "devDependencies": {
     "@types/node": "^16.10.1",
     "@typescript-eslint/eslint-plugin": "^4.31.2",
@@ -14,6 +17,8 @@
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-unused-imports": "^1.1.5",
     "git-commit-msg-linter": "^3.2.8",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.1.2",
     "typescript": "^4.4.3"
   }
 }
