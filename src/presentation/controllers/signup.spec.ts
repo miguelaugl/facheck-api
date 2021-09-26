@@ -108,6 +108,22 @@ describe('SignUp Controller', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('ra'))
   })
 
+  it('should return 400 if no course is provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password',
+        ra: 'any_ra',
+      },
+    }
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(HttpStatusCode.BAD_REQUEST)
+    expect(httpResponse.body).toEqual(new MissingParamError('course'))
+  })
+
   it('should return 400 if password confirmation fails', async () => {
     const { sut } = makeSut()
     const httpRequest = {
@@ -117,6 +133,7 @@ describe('SignUp Controller', () => {
         password: 'any_password',
         passwordConfirmation: 'invalid_password',
         ra: 'any_ra',
+        course: 'any_course',
       },
     }
     const httpResponse = await sut.handle(httpRequest)
