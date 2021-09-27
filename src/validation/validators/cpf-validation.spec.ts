@@ -32,4 +32,11 @@ describe('Cpf Validation', () => {
     const error = sut.validate({ cpf: 'any_cpf' })
     expect(error).toEqual(new InvalidParamError('cpf'))
   })
+
+  it('should call CpfValidator with correct cpf', () => {
+    const { sut, cpfValidatorStub } = makeSut()
+    const isValidSpy = jest.spyOn(cpfValidatorStub, 'isValid')
+    sut.validate({ cpf: 'any_cpf' })
+    expect(isValidSpy).toHaveBeenCalledWith('any_cpf')
+  })
 })
