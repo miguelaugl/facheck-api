@@ -354,4 +354,32 @@ describe('SignUp Controller', () => {
     expect(httpResponse.statusCode).toBe(HttpStatusCode.SERVER_ERROR)
     expect(httpResponse.body).toEqual(new ServerError('stack'))
   })
+
+  it('should return 200 if valid data is provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: 'valid_password',
+        passwordConfirmation: 'valid_password',
+        ra: 'valid_ra',
+        course: 'valid_course',
+        cpf: 'valid_cpf',
+      },
+    }
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual({
+      statusCode: 200,
+      body: {
+        id: 'valid_id',
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: 'valid_password',
+        ra: 'valid_ra',
+        course: 'valid_course',
+        cpf: 'valid_cpf',
+      },
+    })
+  })
 })
