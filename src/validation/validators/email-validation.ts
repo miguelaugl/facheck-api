@@ -8,6 +8,8 @@ export class EmailValidation implements Validation {
   ) {}
 
   validate (input: any): Error {
-    return new InvalidParamError(this.fieldName)
+    if (!this.emailValidator.isValid(input[this.fieldName])) {
+      return new InvalidParamError(this.fieldName)
+    }
   }
 }
