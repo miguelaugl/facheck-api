@@ -1,10 +1,10 @@
 import { AccountModel } from '@/domain/models'
 import { AddAccount, AddAccountModel } from '@/domain/usecases'
+import { InvalidParamError, MissingParamError, ServerError } from '@/presentation/errors'
+import { badRequest, ok, serverError } from '@/presentation/helpers'
+import { HttpRequest } from '@/presentation/protocols/http'
 import { CpfValidator, EmailValidator } from '@/validation/protocols'
 
-import { InvalidParamError, MissingParamError, ServerError } from '../errors'
-import { badRequest, ok, serverError } from '../helpers'
-import { HttpRequest } from '../protocols/http'
 import { SignUpController } from './signup'
 
 type SutTypes = {
