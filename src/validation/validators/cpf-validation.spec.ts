@@ -28,7 +28,8 @@ const makeSut = (): SutTypes => {
 
 describe('Cpf Validation', () => {
   it('should return an InvalidParamError if validation fails', () => {
-    const { sut } = makeSut()
+    const { sut, cpfValidatorStub } = makeSut()
+    jest.spyOn(cpfValidatorStub, 'isValid').mockReturnValueOnce(false)
     const error = sut.validate({ cpf: 'any_cpf' })
     expect(error).toEqual(new InvalidParamError('cpf'))
   })
@@ -38,5 +39,11 @@ describe('Cpf Validation', () => {
     const isValidSpy = jest.spyOn(cpfValidatorStub, 'isValid')
     sut.validate({ cpf: 'any_cpf' })
     expect(isValidSpy).toHaveBeenCalledWith('any_cpf')
+  })
+
+  it('should not return if validation succeeds', () => {
+    const { sut } = makeSut()
+    const error = sut.validate({ cpf: 'any_cpf' })
+    expect(error).toBeFalsy()
   })
 })
