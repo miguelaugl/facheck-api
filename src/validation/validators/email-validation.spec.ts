@@ -25,6 +25,7 @@ const makeSut = (): SutTypes => {
     emailValidatorStub,
   }
 }
+
 describe('Email Validation', () => {
   it('should return an InvalidParamError if validation fails', () => {
     const { sut, emailValidatorStub } = makeSut()
