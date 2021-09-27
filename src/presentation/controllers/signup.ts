@@ -2,7 +2,7 @@ import { AddAccount } from '@/domain/usecases'
 import { CpfValidator, EmailValidator } from '@/validation/protocols'
 
 import { InvalidParamError, MissingParamError } from '../errors'
-import { badRequest, serverError } from '../helpers'
+import { badRequest, ok, serverError } from '../helpers'
 import { Controller, HttpRequest, HttpResponse } from '../protocols'
 
 export class SignUpController implements Controller {
@@ -40,10 +40,7 @@ export class SignUpController implements Controller {
         password,
         ra,
       })
-      return {
-        statusCode: 200,
-        body: account,
-      }
+      return ok(account)
     } catch (error) {
       return serverError(error)
     }
