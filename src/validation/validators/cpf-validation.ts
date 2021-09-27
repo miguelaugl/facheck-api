@@ -8,7 +8,8 @@ export class CpfValidation implements Validation {
   ) {}
 
   validate (input: any): Error {
-    this.cpfValidator.isValid(input[this.fieldName])
-    return new InvalidParamError(this.fieldName)
+    if (!this.cpfValidator.isValid(input[this.fieldName])) {
+      return new InvalidParamError(this.fieldName)
+    }
   }
 }
