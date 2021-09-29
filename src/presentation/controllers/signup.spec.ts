@@ -1,5 +1,4 @@
-import { AccountModel } from '@/domain/models'
-import { AddAccount, AddAccountModel } from '@/domain/usecases'
+import { AddAccount } from '@/domain/usecases'
 import { MissingParamError, ServerError } from '@/presentation/errors'
 import { badRequest, ok, serverError } from '@/presentation/helpers'
 import { HttpRequest } from '@/presentation/protocols/http'
@@ -12,16 +11,6 @@ type SutTypes = {
   addAccountStub: AddAccount
   validationStub: Validation
 }
-
-const makeFakeAccount = (): AccountModel => ({
-  id: 'valid_id',
-  name: 'valid_name',
-  email: 'valid_email@mail.com',
-  password: 'valid_password',
-  ra: 'valid_ra',
-  course: 'valid_course',
-  cpf: 'valid_cpf',
-})
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -37,8 +26,8 @@ const makeFakeRequest = (): HttpRequest => ({
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
-    async add (account: AddAccountModel): Promise<AccountModel> {
-      return makeFakeAccount()
+    async add (account: AddAccount.Params): Promise<AddAccount.Result> {
+      return true
     }
   }
   return new AddAccountStub()
@@ -89,7 +78,7 @@ describe('SignUp Controller', () => {
   it('should return 200 if valid data is provided', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(ok(makeFakeAccount()))
+    expect(httpResponse).toEqual(ok(true))
   })
 
   it('should call Validation with correct values', async () => {

@@ -1,6 +1,5 @@
 import { AddAccountRepository, Hasher } from '@/data/protocols'
-import { AccountModel } from '@/domain/models'
-import { AddAccountModel } from '@/domain/usecases'
+import { AddAccount } from '@/domain/usecases'
 
 import { DbAddAccount } from './db-add-account'
 
@@ -10,7 +9,7 @@ type SutTypes = {
   addAccountRepositoryStub: AddAccountRepository
 }
 
-const makeFakeData = (): AddAccountModel => ({
+const makeFakeData = (): AddAccount.Params => ({
   name: 'valid_name',
   email: 'valid_email',
   password: 'valid_password',
@@ -21,16 +20,8 @@ const makeFakeData = (): AddAccountModel => ({
 
 const makeAddAccountRepository = (): AddAccountRepository => {
   class AddAccountRepositoryStub implements AddAccountRepository {
-    async add (accountData: AddAccountModel): Promise<AccountModel> {
-      return {
-        id: 'valid_id',
-        name: 'valid_name',
-        email: 'valid_email',
-        password: 'hashed_password',
-        course: 'valid_course',
-        cpf: 'valid_cpf',
-        ra: 'valid_ra',
-      }
+    async add (accountData: AddAccountRepository.Params): Promise<AddAccountRepository.Result> {
+      return true
     }
   }
   return new AddAccountRepositoryStub()
@@ -94,15 +85,7 @@ describe('DbAddAccount Usecase', () => {
 
   it('should return an account on success', async () => {
     const { sut } = makeSut()
-    const account = await sut.add(makeFakeData())
-    expect(account).toEqual({
-      id: 'valid_id',
-      name: 'valid_name',
-      email: 'valid_email',
-      password: 'hashed_password',
-      course: 'valid_course',
-      cpf: 'valid_cpf',
-      ra: 'valid_ra',
-    })
+    const isValid = await sut.add(makeFakeData())
+    expect(isValid).toBe(true)
   })
 })
