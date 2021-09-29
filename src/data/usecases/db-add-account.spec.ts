@@ -8,6 +8,15 @@ type SutTypes = {
   encrypterStub: Encrypter
 }
 
+const makeFakeData = (): AddAccountModel => ({
+  name: 'valid_name',
+  email: 'valid_email',
+  password: 'valid_password',
+  course: 'valid_course',
+  cpf: 'valid_cpf',
+  ra: 'valid_ra',
+})
+
 const makeEncrypter = (): Encrypter => {
   class EncrypterStub implements Encrypter {
     async encrypt (value: string): Promise<string> {
@@ -30,30 +39,14 @@ describe('DbAddAccount Usecase', () => {
   it('should call Encrypter with correct password', async () => {
     const { sut, encrypterStub } = makeSut()
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
-    const addAccountData: AddAccountModel = {
-      name: 'valid_name',
-      email: 'valid_email',
-      password: 'valid_password',
-      course: 'valid_course',
-      cpf: 'valid_cpf',
-      ra: 'valid_ra',
-    }
-    await sut.add(addAccountData)
+    await sut.add(makeFakeData())
     expect(encryptSpy).toHaveBeenCalledWith('valid_password')
   })
 
   it('should throw if Encrypter throws', async () => {
     const { sut, encrypterStub } = makeSut()
     jest.spyOn(encrypterStub, 'encrypt').mockReturnValueOnce(Promise.reject(new Error()))
-    const addAccountData: AddAccountModel = {
-      name: 'valid_name',
-      email: 'valid_email',
-      password: 'valid_password',
-      course: 'valid_course',
-      cpf: 'valid_cpf',
-      ra: 'valid_ra',
-    }
-    const promise = sut.add(addAccountData)
+    const promise = sut.add(makeFakeData())
     await expect(promise).rejects.toThrow()
   })
 })
