@@ -43,6 +43,6 @@
     "mongodb": "^4.1.2"
   },
   "_moduleAliases": {
-    "@": "dist"
+    "@": "src"
   }
 }
