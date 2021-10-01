@@ -18,9 +18,16 @@ describe('CpfValidator Adapter', () => {
     expect(isValidSpy).toHaveBeenCalledWith('any_cpf')
   })
 
-  it('should returns true if validator returns true', () => {
+  it('should return true if validator returns true', () => {
     const sut = new CpfValidatorAdapter()
     const isValid = sut.isValid('valid_cpf')
     expect(isValid).toBe(true)
+  })
+
+  it('should return false if validator returns false', () => {
+    const sut = new CpfValidatorAdapter()
+    jest.spyOn(cpf, 'isValid').mockReturnValueOnce(false)
+    const isValid = sut.isValid('invalid_cpf')
+    expect(isValid).toBe(false)
   })
 })
