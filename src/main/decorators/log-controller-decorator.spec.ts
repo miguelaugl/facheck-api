@@ -9,6 +9,12 @@ type SutTypes = {
   controllerStub: Controller
 }
 
+const makeFakeRequest = (): HttpRequest => ({
+  body: {
+    any_param: 'any_value',
+  },
+})
+
 const makeController = (): Controller => {
   class ControllerStub implements Controller {
     async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -31,23 +37,14 @@ describe('LogController Decorator', () => {
   it('should call Controller with correct value', async () => {
     const { sut, controllerStub } = makeSut()
     const handleSpy = jest.spyOn(controllerStub, 'handle')
-    const httpRequest = {
-      body: {
-        any_param: 'any_value',
-      },
-    }
+    const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
     expect(handleSpy).toHaveBeenCalledWith(httpRequest)
   })
 
   it('should return the same result of the controller', async () => {
     const { sut } = makeSut()
-    const httpRequest = {
-      body: {
-        any_param: 'any_value',
-      },
-    }
-    const httpResponse = await sut.handle(httpRequest)
+    const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(ok('successful_response'))
   })
 })
