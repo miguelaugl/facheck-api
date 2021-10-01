@@ -1,5 +1,5 @@
 import { Validation } from '@/validation/protocols'
-import { CompareFieldsValidation, RequiredFieldValidation, ValidationComposite } from '@/validation/validators'
+import { CompareFieldsValidation, EmailValidation, RequiredFieldValidation, ValidationComposite } from '@/validation/validators'
 
 import { makeSignUpValidation } from './signup-validation-factory'
 
@@ -13,6 +13,7 @@ describe('SignUpValidation Factory', () => {
       validations.push(new RequiredFieldValidation(field))
     }
     validations.push(new CompareFieldsValidation('password', 'passwordConfirmation'))
+    validations.push(new EmailValidation('email'))
     expect(ValidationComposite).toHaveBeenCalledWith(validations)
   })
 })
