@@ -1,5 +1,6 @@
+import { CpfValidatorAdapter } from '@/infra/validators/cpf-validator-adapter'
 import { Validation } from '@/validation/protocols'
-import { CompareFieldsValidation, EmailValidation, RequiredFieldValidation, ValidationComposite } from '@/validation/validators'
+import { CompareFieldsValidation, CpfValidation, EmailValidation, RequiredFieldValidation, ValidationComposite } from '@/validation/validators'
 
 export const makeSignUpValidation = (): ValidationComposite => {
   const validations: Validation[] = []
@@ -8,5 +9,6 @@ export const makeSignUpValidation = (): ValidationComposite => {
   }
   validations.push(new CompareFieldsValidation('password', 'passwordConfirmation'))
   validations.push(new EmailValidation('email'))
+  validations.push(new CpfValidation('cpf', new CpfValidatorAdapter()))
   return new ValidationComposite(validations)
 }
