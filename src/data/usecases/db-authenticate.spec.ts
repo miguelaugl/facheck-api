@@ -23,7 +23,7 @@ type SutTypes = {
 
 const makeUpdateAccessTokenRepositoryStub = (): UpdateAccessTokenRepository => {
   class UpdateAccessTokenRepositoryStub implements UpdateAccessTokenRepository {
-    async updateAccessToken (accessToken: string): Promise<void> {}
+    async updateAccessToken (accountId: string, accessToken: string): Promise<void> {}
   }
   return new UpdateAccessTokenRepositoryStub()
 }
@@ -169,7 +169,7 @@ describe('DbAuthenticate Usecase', () => {
     expect(accessToken).toBe('any_token')
   })
 
-  it('should call UpdateAccessTokenRepository with correct access token', async () => {
+  it('should call UpdateAccessTokenRepository with correct values', async () => {
     const { sut, updateAccessTokenRepositoryStub } = makeSut()
     const updateSpy = jest.spyOn(updateAccessTokenRepositoryStub, 'updateAccessToken')
     const authParams = {
@@ -177,7 +177,7 @@ describe('DbAuthenticate Usecase', () => {
       password: 'any_password',
     }
     await sut.auth(authParams)
-    expect(updateSpy).toHaveBeenCalledWith('any_token')
+    expect(updateSpy).toHaveBeenCalledWith('any_id', 'any_token')
   })
 
   it('should throw if UpdateAccessTokenRepository throws', async () => {
