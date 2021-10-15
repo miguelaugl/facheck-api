@@ -1,9 +1,10 @@
 import { Authentication } from '@/domain/usecases'
-import { ok, serverError, unauthorized } from '@/presentation/helpers'
+import { badRequest, ok, serverError, unauthorized } from '@/presentation/helpers'
 import { HttpRequest } from '@/presentation/protocols'
 import { mockAuthentication, mockValidation } from '@/presentation/tests'
 import { Validation } from '@/validation/protocols'
 
+import { MissingParamError } from '../errors'
 import { LoginController } from './login'
 
 const mockRequest = (): HttpRequest => ({
@@ -72,5 +73,13 @@ describe('Login Controller', () => {
       email: httpRequest.body.email,
       password: httpRequest.body.password,
     })
+  })
+
+  it('should return 400 if Validation returns an error', async () => {
+    const { sut, validationStub } = makeSut()
+    const error = new MissingParamError('email')
+    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(error)
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(badRequest(error))
   })
 })
