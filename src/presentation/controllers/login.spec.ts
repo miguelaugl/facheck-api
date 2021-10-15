@@ -1,5 +1,5 @@
 import { Authentication } from '@/domain/usecases'
-import { unauthorized } from '@/presentation/helpers'
+import { serverError, unauthorized } from '@/presentation/helpers'
 
 import { LoginController } from './login'
 
@@ -54,5 +54,19 @@ describe('Login Controller', () => {
     }
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(unauthorized())
+  })
+
+  it('should return 500 if Authentication throws', async () => {
+    const { sut, authenticationStub } = makeSut()
+    const error = new Error()
+    jest.spyOn(authenticationStub, 'auth').mockReturnValueOnce(Promise.reject(error))
+    const httpRequest = {
+      body: {
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    }
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(serverError(error))
   })
 })
