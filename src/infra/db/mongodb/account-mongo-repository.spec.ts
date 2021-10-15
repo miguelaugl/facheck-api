@@ -23,16 +23,36 @@ describe('Account Mongo Repository', () => {
     await accountCollection.deleteMany({})
   })
 
-  it('should add an account on success', async () => {
-    const sut = makeSut()
-    const isValid = await sut.add({
-      name: 'valid_name',
-      email: 'valid_email',
-      password: 'hashed_password',
-      course: 'valid_course',
-      cpf: 'valid_cpf',
-      ra: 'valid_ra',
+  describe('add()', () => {
+    it('should add an account on success', async () => {
+      const sut = makeSut()
+      const isValid = await sut.add({
+        name: 'any_name',
+        email: 'any_email',
+        password: 'hashed_password',
+        course: 'any_course',
+        cpf: 'any_cpf',
+        ra: 'any_ra',
+      })
+      expect(isValid).toBe(true)
     })
-    expect(isValid).toBe(true)
+  })
+
+  describe('loadByEmail()', () => {
+    it('should return an account on success', async () => {
+      await accountCollection.insertOne({
+        name: 'Miguel Freitas',
+        email: 'any_email@mail.com',
+        password: 'hashed_password',
+        course: 'any_course',
+        cpf: 'any_cpf',
+        ra: 'any_ra',
+      })
+      const sut = makeSut()
+      const account = await sut.loadByEmail('any_email@mail.com')
+      expect(account).toBeTruthy()
+      expect(account.id).toBeTruthy()
+      expect(account.name).toBe('Miguel Freitas')
+    })
   })
 })
