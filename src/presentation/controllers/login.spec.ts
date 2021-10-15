@@ -1,10 +1,10 @@
 import { Authentication } from '@/domain/usecases'
+import { MissingParamError } from '@/presentation/errors'
 import { badRequest, ok, serverError, unauthorized } from '@/presentation/helpers'
 import { HttpRequest } from '@/presentation/protocols'
 import { mockAuthentication, mockValidation } from '@/presentation/tests'
 import { Validation } from '@/validation/protocols'
 
-import { MissingParamError } from '../errors'
 import { LoginController } from './login'
 
 const mockRequest = (): HttpRequest => ({
@@ -37,10 +37,7 @@ describe('Login Controller', () => {
     const authSpy = jest.spyOn(authenticationStub, 'auth')
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
-    expect(authSpy).toHaveBeenCalledWith({
-      email: httpRequest.body.email,
-      password: httpRequest.body.password,
-    })
+    expect(authSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 
   it('should return 401 if invalid credentials are provided', async () => {
@@ -69,10 +66,7 @@ describe('Login Controller', () => {
     const validateSpy = jest.spyOn(validationStub, 'validate')
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
-    expect(validateSpy).toHaveBeenCalledWith({
-      email: httpRequest.body.email,
-      password: httpRequest.body.password,
-    })
+    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 
   it('should return 400 if Validation returns an error', async () => {

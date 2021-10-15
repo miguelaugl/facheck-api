@@ -1,5 +1,7 @@
 import { Collection } from 'mongodb'
 
+import { mockAddAccountParams } from '@/domain/test'
+
 import { AccountMongoRepository } from './account-mongo-repository'
 import { MongoHelper } from './mongo-helper'
 
@@ -26,44 +28,25 @@ describe('Account Mongo Repository', () => {
   describe('add()', () => {
     it('should add an account on success', async () => {
       const sut = makeSut()
-      const isValid = await sut.add({
-        name: 'any_name',
-        email: 'any_email',
-        password: 'hashed_password',
-        course: 'any_course',
-        cpf: 'any_cpf',
-        ra: 'any_ra',
-      })
+      const isValid = await sut.add(mockAddAccountParams())
       expect(isValid).toBe(true)
     })
   })
 
   describe('loadByEmail()', () => {
     it('should return an account on success', async () => {
-      await accountCollection.insertOne({
-        name: 'Miguel Freitas',
-        email: 'any_email@mail.com',
-        password: 'hashed_password',
-        course: 'any_course',
-        cpf: 'any_cpf',
-        ra: 'any_ra',
-      })
+      const addAccountParams = mockAddAccountParams()
+      await accountCollection.insertOne(addAccountParams)
       const sut = makeSut()
-      const account = await sut.loadByEmail('any_email@mail.com')
+      const account = await sut.loadByEmail(addAccountParams.email)
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
-      expect(account.name).toBe('Miguel Freitas')
+      expect(account.name).toBe(addAccountParams.name)
     })
 
     it('should return null if load fails', async () => {
-      await accountCollection.insertOne({
-        name: 'Miguel Freitas',
-        email: 'any_email@mail.com',
-        password: 'hashed_password',
-        course: 'any_course',
-        cpf: 'any_cpf',
-        ra: 'any_ra',
-      })
+      const addAccountParams = mockAddAccountParams()
+      await accountCollection.insertOne(addAccountParams)
       const sut = makeSut()
       const account = await sut.loadByEmail('invalid_email@mail.com')
       expect(account).toBeFalsy()

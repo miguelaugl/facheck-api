@@ -1,7 +1,7 @@
-import { DbAddAccount } from '@/data/usecases/db-add-account'
-import { BcrypterAdapter } from '@/infra/cryptography/bcrypter-adapter'
-import { AccountMongoRepository } from '@/infra/db/mongodb/account-mongo-repository'
-import { SignUpController } from '@/presentation/controllers/signup'
+import { DbAddAccount } from '@/data/usecases'
+import { BcrypterAdapter } from '@/infra/cryptography'
+import { AccountMongoRepository } from '@/infra/db/mongodb'
+import { SignUpController } from '@/presentation/controllers'
 
 import { makeSignUpValidation } from './signup-validation-factory'
 

@@ -15,13 +15,13 @@ type SutTypes = {
 
 const mockRequest = (): HttpRequest => ({
   body: {
-    name: 'valid_name',
-    email: 'valid_email@mail.com',
-    password: 'valid_password',
-    passwordConfirmation: 'valid_password',
-    ra: 'valid_ra',
-    course: 'valid_course',
-    cpf: 'valid_cpf',
+    name: 'any_name',
+    email: 'any_email@mail.com',
+    password: 'any_password',
+    passwordConfirmation: 'any_password',
+    ra: 'any_ra',
+    course: 'any_course',
+    cpf: 'any_cpf',
   },
 })
 
@@ -40,14 +40,15 @@ describe('SignUp Controller', () => {
   it('should call AddAccount with correct values', async () => {
     const { sut, addAccountStub } = makeSut()
     const addSpy = jest.spyOn(addAccountStub, 'add')
-    await sut.handle(mockRequest())
+    const request = mockRequest()
+    await sut.handle(request)
     expect(addSpy).toHaveBeenCalledWith({
-      name: 'valid_name',
-      email: 'valid_email@mail.com',
-      password: 'valid_password',
-      ra: 'valid_ra',
-      course: 'valid_course',
-      cpf: 'valid_cpf',
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password',
+      ra: 'any_ra',
+      course: 'any_course',
+      cpf: 'any_cpf',
     })
   })
 
