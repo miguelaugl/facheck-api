@@ -1,4 +1,4 @@
-import { Encrypter, HashComparer, LoadAccountByEmailRepository } from '@/data/protocols'
+import { Encrypter, HashComparer, LoadAccountByEmailRepository, UpdateAccessTokenRepository } from '@/data/protocols'
 import { AccountModel } from '@/domain/models'
 
 import { DbAuthenticate } from './db-authenticate'
@@ -18,6 +18,14 @@ type SutTypes = {
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
   hashComparerStub: HashComparer
   encrypterStub: Encrypter
+  updateAccessTokenRepositoryStub: UpdateAccessTokenRepository
+}
+
+const makeUpdateAccessTokenRepositoryStub = (): UpdateAccessTokenRepository => {
+  class UpdateAccessTokenRepositoryStub implements UpdateAccessTokenRepository {
+    async updateAccessToken (accessToken: string): Promise<void> {}
+  }
+  return new UpdateAccessTokenRepositoryStub()
 }
 
 const makeEncrypterStub = (): Encrypter => {
@@ -51,12 +59,14 @@ const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepositoryStub()
   const hashComparerStub = makeHasherComparerStub()
   const encrypterStub = makeEncrypterStub()
-  const sut = new DbAuthenticate(loadAccountByEmailRepositoryStub, hashComparerStub, encrypterStub)
+  const updateAccessTokenRepositoryStub = makeUpdateAccessTokenRepositoryStub()
+  const sut = new DbAuthenticate(loadAccountByEmailRepositoryStub, hashComparerStub, encrypterStub, updateAccessTokenRepositoryStub)
   return {
     sut,
     loadAccountByEmailRepositoryStub,
     hashComparerStub,
     encrypterStub,
+    updateAccessTokenRepositoryStub,
   }
 }
 
@@ -147,5 +157,26 @@ describe('DbAuthenticate Usecase', () => {
     }
     const promise = sut.auth(authParams)
     await expect(promise).rejects.toThrow()
+  })
+
+  it('should return accessToken if Encrypter succeeds', async () => {
+    const { sut } = makeSut()
+    const authParams = {
+      email: 'any_email@mail.com',
+      password: 'any_password',
+    }
+    const accessToken = await sut.auth(authParams)
+    expect(accessToken).toBe('any_token')
+  })
+
+  it('should call UpdateAccessTokenRepository with correct access token', async () => {
+    const { sut, updateAccessTokenRepositoryStub } = makeSut()
+    const updateSpy = jest.spyOn(updateAccessTokenRepositoryStub, 'updateAccessToken')
+    const authParams = {
+      email: 'any_email@mail.com',
+      password: 'any_password',
+    }
+    await sut.auth(authParams)
+    expect(updateSpy).toHaveBeenCalledWith('any_token')
   })
 })
