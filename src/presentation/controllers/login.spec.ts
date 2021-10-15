@@ -1,5 +1,6 @@
 import { Authentication } from '@/domain/usecases'
 import { ok, serverError, unauthorized } from '@/presentation/helpers'
+import { Validation } from '@/validation/protocols'
 
 import { LoginController } from './login'
 
@@ -15,14 +16,26 @@ const makeAuthenticationStub = (): Authentication => {
 type SutTypes = {
   sut: LoginController
   authenticationStub: Authentication
+  validationStub: Validation
+}
+
+const makeValidationStub = (): Validation => {
+  class ValidationStub implements Validation {
+    validate (input: any): Error {
+      return null
+    }
+  }
+  return new ValidationStub()
 }
 
 const makeSut = (): SutTypes => {
   const authenticationStub = makeAuthenticationStub()
-  const sut = new LoginController(authenticationStub)
+  const validationStub = makeValidationStub()
+  const sut = new LoginController(authenticationStub, validationStub)
   return {
     sut,
     authenticationStub,
+    validationStub,
   }
 }
 
@@ -80,5 +93,21 @@ describe('Login Controller', () => {
     }
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(ok('any_token'))
+  })
+
+  it('should call Validation with correct values', async () => {
+    const { sut, validationStub } = makeSut()
+    const validateSpy = jest.spyOn(validationStub, 'validate')
+    const httpRequest = {
+      body: {
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    }
+    await sut.handle(httpRequest)
+    expect(validateSpy).toHaveBeenCalledWith({
+      email: 'any_email@mail.com',
+      password: 'any_password',
+    })
   })
 })

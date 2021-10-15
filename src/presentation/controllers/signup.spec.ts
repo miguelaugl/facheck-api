@@ -34,12 +34,12 @@ const makeAddAccount = (): AddAccount => {
 }
 
 const makeValidation = (): Validation => {
-  class ValidationStup implements Validation {
+  class ValidationStub implements Validation {
     validate (input: any): Error {
       return null
     }
   }
-  return new ValidationStup()
+  return new ValidationStub()
 }
 
 const makeSut = (): SutTypes => {
