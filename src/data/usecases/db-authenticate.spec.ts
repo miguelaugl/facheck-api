@@ -58,4 +58,15 @@ describe('DbAuthenticate Usecase', () => {
     const promise = sut.auth(authParams)
     await expect(promise).rejects.toThrow()
   })
+
+  it('should return null if LoadAccountByEmailRepository returns null', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockReturnValueOnce(null)
+    const authParams = {
+      email: 'any_email@mail.com',
+      password: 'any_password',
+    }
+    const result = await sut.auth(authParams)
+    expect(result).toBe(null)
+  })
 })
