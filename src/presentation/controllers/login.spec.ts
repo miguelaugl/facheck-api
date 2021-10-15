@@ -1,5 +1,5 @@
 import { Authentication } from '@/domain/usecases'
-import { serverError, unauthorized } from '@/presentation/helpers'
+import { ok, serverError, unauthorized } from '@/presentation/helpers'
 
 import { LoginController } from './login'
 
@@ -68,5 +68,17 @@ describe('Login Controller', () => {
     }
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(serverError(error))
+  })
+
+  it('should return 200 if valid credentials are provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    }
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(ok('any_token'))
   })
 })
