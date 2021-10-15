@@ -1,3 +1,4 @@
+import { hash } from 'bcrypt'
 import { Collection } from 'mongodb'
 import request from 'supertest'
 
@@ -6,7 +7,7 @@ import app from '@/main/config/app'
 
 let accountCollection: Collection
 
-describe('SignUp Routes', () => {
+describe('Login Routes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL)
   })
@@ -20,18 +21,19 @@ describe('SignUp Routes', () => {
     await accountCollection.deleteMany({})
   })
 
-  describe('POST /signup', () => {
-    it('should return 200 on signup', async () => {
+  describe('POST /login', () => {
+    it('should return 200 on login', async () => {
+      const password = await hash('12345', 12)
+      await accountCollection.insertOne({
+        name: 'Miguel Freitas',
+        email: 'realemail@mail.com',
+        password,
+      })
       await request(app)
-        .post('/api/signup')
+        .post('/api/login')
         .send({
-          name: 'Miguel Augusto',
           email: 'realemail@mail.com',
           password: '12345',
-          passwordConfirmation: '12345',
-          ra: '1780481911025',
-          course: 'ADS',
-          cpf: '85790781055',
         })
         .expect(200)
     })
