@@ -1,4 +1,4 @@
-import { HashComparer, LoadAccountByEmailRepository } from '@/data/protocols'
+import { Encrypter, HashComparer, LoadAccountByEmailRepository } from '@/data/protocols'
 import { AccountModel } from '@/domain/models'
 
 import { DbAuthenticate } from './db-authenticate'
@@ -17,6 +17,16 @@ type SutTypes = {
   sut: DbAuthenticate
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
   hashComparerStub: HashComparer
+  encrypterStub: Encrypter
+}
+
+const makeEncrypterStub = (): Encrypter => {
+  class EncrypterStub implements Encrypter {
+    async encrypt (value: string): Promise<string> {
+      return 'any_token'
+    }
+  }
+  return new EncrypterStub()
 }
 
 const makeHasherComparerStub = (): HashComparer => {
@@ -40,11 +50,13 @@ const makeLoadAccountByEmailRepositoryStub = (): LoadAccountByEmailRepository =>
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepositoryStub()
   const hashComparerStub = makeHasherComparerStub()
-  const sut = new DbAuthenticate(loadAccountByEmailRepositoryStub, hashComparerStub)
+  const encrypterStub = makeEncrypterStub()
+  const sut = new DbAuthenticate(loadAccountByEmailRepositoryStub, hashComparerStub, encrypterStub)
   return {
     sut,
     loadAccountByEmailRepositoryStub,
     hashComparerStub,
+    encrypterStub,
   }
 }
 
@@ -113,5 +125,16 @@ describe('DbAuthenticate Usecase', () => {
     }
     const result = await sut.auth(authParams)
     expect(result).toBe(null)
+  })
+
+  it('should call Encrypter with correct id', async () => {
+    const { sut, encrypterStub } = makeSut()
+    const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
+    const authParams = {
+      email: 'any_email@mail.com',
+      password: 'any_password',
+    }
+    await sut.auth(authParams)
+    expect(encryptSpy).toHaveBeenCalledWith('any_id')
   })
 })
