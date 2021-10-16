@@ -1,5 +1,5 @@
 import { AddMonitoring } from '@/domain/usecases'
-import { serverError } from '@/presentation/helpers'
+import { noContent, serverError } from '@/presentation/helpers'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 
 export class AddMonitoringController implements Controller {
@@ -10,7 +10,7 @@ export class AddMonitoringController implements Controller {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       await this.addMonitoring.add(httpRequest.body)
-      return null
+      return noContent()
     } catch (error) {
       return serverError(error)
     }

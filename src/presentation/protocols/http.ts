@@ -3,6 +3,7 @@ export enum HttpStatusCode {
   SERVER_ERROR = 500,
   OK = 200,
   UNAUTHORIZED = 401,
+  NO_CONTENT = 204
 }
 
 export type HttpResponse = {

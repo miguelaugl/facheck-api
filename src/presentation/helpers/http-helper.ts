@@ -20,3 +20,8 @@ export const unauthorized = (): HttpResponse => ({
   statusCode: HttpStatusCode.UNAUTHORIZED,
   body: new UnauthorizedError(),
 })
+
+export const noContent = (): HttpResponse => ({
+  statusCode: HttpStatusCode.NO_CONTENT,
+  body: null,
+})
