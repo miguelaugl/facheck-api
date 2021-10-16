@@ -1,6 +1,6 @@
 import { Collection } from 'mongodb'
 
-import { mockAddMonitoringParams } from '@/domain/test'
+import { mockAddMonitoringParams } from '@/domain/tests'
 import { MongoHelper } from '@/infra/db/mongodb'
 
 import { MonitoringMongoRepository } from './monitoring-mongo-repository'

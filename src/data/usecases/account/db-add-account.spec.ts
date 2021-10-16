@@ -1,6 +1,6 @@
 import { AddAccountRepository, Hasher } from '@/data/protocols'
 import { mockAddAccountRepository, mockHasher } from '@/data/tests'
-import { mockAddAccountParams } from '@/domain/test'
+import { mockAddAccountParams } from '@/domain/tests'
 
 import { DbAddAccount } from './db-add-account'
 

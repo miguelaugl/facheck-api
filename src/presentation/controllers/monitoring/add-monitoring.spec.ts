@@ -1,4 +1,4 @@
-import { mockAddMonitoringParams } from '@/domain/test'
+import { mockAddMonitoringParams } from '@/domain/tests'
 import { AddMonitoring } from '@/domain/usecases'
 import { MissingParamError } from '@/presentation/errors'
 import { badRequest, noContent, serverError } from '@/presentation/helpers'

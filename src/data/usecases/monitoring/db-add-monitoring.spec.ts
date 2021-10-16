@@ -1,5 +1,5 @@
 import { AddMonitoringRepository } from '@/data/protocols'
-import { mockAddMonitoringParams } from '@/domain/test'
+import { mockAddMonitoringParams } from '@/domain/tests'
 
 import { DbAddMonitoring } from './db-add-monitoring'
 

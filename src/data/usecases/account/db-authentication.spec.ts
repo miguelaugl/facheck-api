@@ -1,6 +1,6 @@
 import { Encrypter, HashComparer, LoadAccountByEmailRepository, UpdateAccessTokenRepository } from '@/data/protocols'
 import { mockEncrypter, mockHashComparer, mockLoadAccountByEmailRepository, mockUpdateAccessTokenRepository } from '@/data/tests'
-import { mockAuthenticationParams } from '@/domain/test'
+import { mockAuthenticationParams } from '@/domain/tests'
 
 import { DbAuthentication } from './db-authentication'
 
