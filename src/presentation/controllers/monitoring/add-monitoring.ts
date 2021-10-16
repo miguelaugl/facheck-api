@@ -1,5 +1,5 @@
 import { AddMonitoring } from '@/domain/usecases'
-import { noContent, serverError } from '@/presentation/helpers'
+import { badRequest, noContent, serverError } from '@/presentation/helpers'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 import { Validation } from '@/validation/protocols'
 
@@ -11,7 +11,10 @@ export class AddMonitoringController implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      this.validation.validate(httpRequest.body)
+      const error = this.validation.validate(httpRequest.body)
+      if (error) {
+        return badRequest(error)
+      }
       await this.addMonitoring.add(httpRequest.body)
       return noContent()
     } catch (error) {
