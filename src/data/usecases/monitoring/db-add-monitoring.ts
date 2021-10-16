@@ -6,8 +6,7 @@ export class DbAddMonitoring implements AddMonitoring {
     private readonly addMonitoringRepository: AddMonitoringRepository,
   ) {}
 
-  async add (params: AddMonitoring.Params): Promise<AddMonitoring.Result> {
+  async add (params: AddMonitoring.Params): Promise<void> {
     await this.addMonitoringRepository.add(params)
-    return null
   }
 }

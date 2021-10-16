@@ -1,5 +1,5 @@
 import { AddMonitoringRepository } from '@/data/protocols'
-import { AddMonitoring } from '@/domain/usecases'
+import { mockAddMonitoringParams } from '@/domain/test'
 
 import { DbAddMonitoring } from './db-add-monitoring'
 
@@ -24,13 +24,6 @@ const makeSut = (): SutTypes => {
     addMonitoringRepositorySpy,
   }
 }
-
-const mockAddMonitoringParams = (): AddMonitoring.Params => ({
-  subject: 'any_subject',
-  initDate: new Date(),
-  endDate: new Date(),
-  room: 16,
-})
 
 describe('DbAddMonitoring Usecase', () => {
   it('should call AddMonitoringRepository with correct values', async () => {

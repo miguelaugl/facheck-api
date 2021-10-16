@@ -1,7 +1,5 @@
-import { MonitoringModel } from '@/domain/models'
-
 export interface AddMonitoring {
-  add: (params: AddMonitoring.Params) => Promise<AddMonitoring.Result>
+  add: (params: AddMonitoring.Params) => Promise<void>
 }
 
 export namespace AddMonitoring {
@@ -12,5 +10,4 @@ export namespace AddMonitoring {
     room: number
     maxStudents?: number
   }
-  export type Result = MonitoringModel
 }
