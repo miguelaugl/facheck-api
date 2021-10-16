@@ -1,6 +1,6 @@
 import { mockAddMonitoringParams } from '@/domain/test'
 import { AddMonitoring } from '@/domain/usecases'
-import { serverError } from '@/presentation/helpers'
+import { noContent, serverError } from '@/presentation/helpers'
 
 import { AddMonitoringController } from './add-monitoring'
 
@@ -42,5 +42,11 @@ describe('AddMonitoring Controller', () => {
     jest.spyOn(addMonitoringSpy, 'add').mockReturnValueOnce(Promise.reject(error))
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(serverError(error))
+  })
+
+  it('should return 204 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(noContent())
   })
 })
