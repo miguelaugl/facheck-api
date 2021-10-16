@@ -1,6 +1,7 @@
 import { mockAddMonitoringParams } from '@/domain/test'
 import { AddMonitoring } from '@/domain/usecases'
 import { noContent, serverError } from '@/presentation/helpers'
+import { HttpRequest } from '@/presentation/protocols'
 import { ValidationSpy } from '@/presentation/tests'
 
 import { AddMonitoringController } from './add-monitoring'
@@ -19,6 +20,10 @@ type SutTypes = {
   validationSpy: ValidationSpy
 }
 
+const mockRequest = (): HttpRequest => ({
+  body: mockAddMonitoringParams(),
+})
+
 const makeSut = (): SutTypes => {
   const addMonitoringSpy = new AddMonitoringSpy()
   const validationSpy = new ValidationSpy()
@@ -33,9 +38,7 @@ const makeSut = (): SutTypes => {
 describe('AddMonitoring Controller', () => {
   it('should call AddMonitoring with correct values', async () => {
     const { sut, addMonitoringSpy } = makeSut()
-    const httpRequest = {
-      body: mockAddMonitoringParams(),
-    }
+    const httpRequest = mockRequest()
     await sut.handle(httpRequest)
     expect(addMonitoringSpy.params).toEqual(httpRequest.body)
   })
@@ -50,15 +53,13 @@ describe('AddMonitoring Controller', () => {
 
   it('should return 204 on success', async () => {
     const { sut } = makeSut()
-    const httpResponse = await sut.handle({})
+    const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(noContent())
   })
 
   it('should call Validation with correct values', async () => {
     const { sut, validationSpy } = makeSut()
-    const httpRequest = {
-      body: mockAddMonitoringParams(),
-    }
+    const httpRequest = mockRequest()
     await sut.handle(httpRequest)
     expect(validationSpy.input).toEqual(httpRequest.body)
   })
