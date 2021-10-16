@@ -1,6 +1,7 @@
 import { mockAddMonitoringParams } from '@/domain/test'
 import { AddMonitoring } from '@/domain/usecases'
 import { noContent, serverError } from '@/presentation/helpers'
+import { ValidationSpy } from '@/presentation/tests'
 
 import { AddMonitoringController } from './add-monitoring'
 
@@ -15,14 +16,17 @@ class AddMonitoringSpy implements AddMonitoring {
 type SutTypes = {
   sut: AddMonitoringController
   addMonitoringSpy: AddMonitoringSpy
+  validationSpy: ValidationSpy
 }
 
 const makeSut = (): SutTypes => {
   const addMonitoringSpy = new AddMonitoringSpy()
-  const sut = new AddMonitoringController(addMonitoringSpy)
+  const validationSpy = new ValidationSpy()
+  const sut = new AddMonitoringController(addMonitoringSpy, validationSpy)
   return {
     sut,
     addMonitoringSpy,
+    validationSpy,
   }
 }
 
@@ -48,5 +52,14 @@ describe('AddMonitoring Controller', () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(noContent())
+  })
+
+  it('should call Validation with correct values', async () => {
+    const { sut, validationSpy } = makeSut()
+    const httpRequest = {
+      body: mockAddMonitoringParams(),
+    }
+    await sut.handle(httpRequest)
+    expect(validationSpy.input).toEqual(httpRequest.body)
   })
 })
