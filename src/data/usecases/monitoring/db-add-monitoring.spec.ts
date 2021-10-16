@@ -39,4 +39,11 @@ describe('DbAddMonitoring Usecase', () => {
     await sut.add(addMonitoringParams)
     expect(addMonitoringRepositorySpy.params).toEqual(addMonitoringParams)
   })
+
+  it('should throw if AddMonitoringRepository throws', async () => {
+    const { sut, addMonitoringRepositorySpy } = makeSut()
+    jest.spyOn(addMonitoringRepositorySpy, 'add').mockReturnValueOnce(Promise.reject(new Error()))
+    const promise = sut.add(mockAddMonitoringParams())
+    await expect(promise).rejects.toThrow()
+  })
 })
