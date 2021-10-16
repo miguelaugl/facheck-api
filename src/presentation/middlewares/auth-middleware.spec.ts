@@ -15,17 +15,29 @@ class LoadAccountByTokenSpy implements LoadAccountByToken {
   }
 }
 
+type SutTypes = {
+  sut: AuthMiddleware
+  loadAccountByTokenSpy: LoadAccountByTokenSpy
+}
+
+const makeSut = (): SutTypes => {
+  const loadAccountByTokenSpy = new LoadAccountByTokenSpy()
+  const sut = new AuthMiddleware(loadAccountByTokenSpy)
+  return {
+    sut,
+    loadAccountByTokenSpy,
+  }
+}
+
 describe('Auth Middleware', () => {
   it('should return 403 if no x-access-token exists in headers', async () => {
-    const loadAccountByTokenSpy = new LoadAccountByTokenSpy()
-    const sut = new AuthMiddleware(loadAccountByTokenSpy)
+    const { sut } = makeSut()
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(forbidden(new AccessDeniedError()))
   })
 
   it('should call LoadAccountByToken with correct accessToken', async () => {
-    const loadAccountByTokenSpy = new LoadAccountByTokenSpy()
-    const sut = new AuthMiddleware(loadAccountByTokenSpy)
+    const { sut, loadAccountByTokenSpy } = makeSut()
     const accessToken = 'any_token'
     await sut.handle({
       headers: {
