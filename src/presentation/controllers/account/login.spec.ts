@@ -2,8 +2,7 @@ import { Authentication } from '@/domain/usecases'
 import { MissingParamError } from '@/presentation/errors'
 import { badRequest, ok, serverError, unauthorized } from '@/presentation/helpers'
 import { HttpRequest } from '@/presentation/protocols'
-import { mockAuthentication, mockValidation } from '@/presentation/tests'
-import { Validation } from '@/validation/protocols'
+import { mockAuthentication, ValidationSpy } from '@/presentation/tests'
 
 import { LoginController } from './login'
 
@@ -17,17 +16,17 @@ const mockRequest = (): HttpRequest => ({
 type SutTypes = {
   sut: LoginController
   authenticationStub: Authentication
-  validationStub: Validation
+  validationSpy: ValidationSpy
 }
 
 const makeSut = (): SutTypes => {
   const authenticationStub = mockAuthentication()
-  const validationStub = mockValidation()
-  const sut = new LoginController(authenticationStub, validationStub)
+  const validationSpy = new ValidationSpy()
+  const sut = new LoginController(authenticationStub, validationSpy)
   return {
     sut,
     authenticationStub,
-    validationStub,
+    validationSpy,
   }
 }
 
@@ -62,17 +61,16 @@ describe('Login Controller', () => {
   })
 
   it('should call Validation with correct values', async () => {
-    const { sut, validationStub } = makeSut()
-    const validateSpy = jest.spyOn(validationStub, 'validate')
+    const { sut, validationSpy } = makeSut()
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
-    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
+    expect(validationSpy.input).toEqual(httpRequest.body)
   })
 
   it('should return 400 if Validation returns an error', async () => {
-    const { sut, validationStub } = makeSut()
+    const { sut, validationSpy } = makeSut()
     const error = new MissingParamError('email')
-    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(error)
+    jest.spyOn(validationSpy, 'validate').mockReturnValueOnce(error)
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(badRequest(error))
   })
