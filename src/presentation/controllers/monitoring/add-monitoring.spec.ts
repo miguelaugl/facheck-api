@@ -1,6 +1,7 @@
 import { mockAddMonitoringParams } from '@/domain/test'
 import { AddMonitoring } from '@/domain/usecases'
-import { noContent, serverError } from '@/presentation/helpers'
+import { MissingParamError } from '@/presentation/errors'
+import { badRequest, noContent, serverError } from '@/presentation/helpers'
 import { HttpRequest } from '@/presentation/protocols'
 import { ValidationSpy } from '@/presentation/tests'
 
@@ -62,5 +63,13 @@ describe('AddMonitoring Controller', () => {
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
     expect(validationSpy.input).toEqual(httpRequest.body)
+  })
+
+  it('should return 401 if Validation fails', async () => {
+    const { sut, validationSpy } = makeSut()
+    const error = new MissingParamError('any_field')
+    jest.spyOn(validationSpy, 'validate').mockReturnValueOnce(new MissingParamError('any_field'))
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(badRequest(error))
   })
 })
