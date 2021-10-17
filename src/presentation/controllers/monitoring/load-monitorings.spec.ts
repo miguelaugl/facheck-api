@@ -1,14 +1,16 @@
+import { mockMonitoringModels } from '@/domain/tests'
 import { LoadMonitorings } from '@/domain/usecases'
-import { serverError } from '@/presentation/helpers'
+import { ok, serverError } from '@/presentation/helpers'
 
 import { LoadMonitoringsController } from './load-monitorings'
 
 class LoadMonitoringsSpy implements LoadMonitorings {
   callsCount = 0
+  result = mockMonitoringModels()
 
   async load (): Promise<LoadMonitorings.Result> {
     this.callsCount = this.callsCount + 1
-    return null
+    return this.result
   }
 }
 
@@ -39,5 +41,11 @@ describe('LoadMonitorings Controller', () => {
     jest.spyOn(loadMonitoringsSpy, 'load').mockReturnValueOnce(Promise.reject(error))
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(serverError(error))
+  })
+
+  it('should return 200 on success', async () => {
+    const { sut, loadMonitoringsSpy } = makeSut()
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(ok(loadMonitoringsSpy.result))
   })
 })
