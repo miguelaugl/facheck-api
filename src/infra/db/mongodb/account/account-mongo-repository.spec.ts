@@ -73,4 +73,19 @@ describe('Account Mongo Repository', () => {
       expect(account.accessToken).toBe(accessToken)
     })
   })
+
+  describe('loadAccountByToken()', () => {
+    it('should return an account on success', async () => {
+      const addAccountParams = mockAddAccountParams()
+      const accessToken = 'any_token'
+      await accountCollection.insertOne({
+        ...addAccountParams,
+        accessToken,
+      })
+      const sut = makeSut()
+      const account = await sut.loadByToken(accessToken)
+      expect(account).toBeTruthy()
+      expect(account.accessToken).toBe(accessToken)
+    })
+  })
 })
