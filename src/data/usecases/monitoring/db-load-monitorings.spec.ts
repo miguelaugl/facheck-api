@@ -13,10 +13,23 @@ class LoadMonitoringsRepositorySpy implements LoadMonitoringsRepository {
   }
 }
 
+type SutTypes = {
+  sut: DbLoadMonitorings
+  loadMonitoringsRepositorySpy: LoadMonitoringsRepositorySpy
+}
+
+const makeSut = (): SutTypes => {
+  const loadMonitoringsRepositorySpy = new LoadMonitoringsRepositorySpy()
+  const sut = new DbLoadMonitorings(loadMonitoringsRepositorySpy)
+  return {
+    sut,
+    loadMonitoringsRepositorySpy,
+  }
+}
+
 describe('DbLoadMonitorings Usecase', () => {
   it('should call LoadMonitoringsRepository', async () => {
-    const loadMonitoringsRepositorySpy = new LoadMonitoringsRepositorySpy()
-    const sut = new DbLoadMonitorings(loadMonitoringsRepositorySpy)
+    const { sut, loadMonitoringsRepositorySpy } = makeSut()
     await sut.load()
     expect(loadMonitoringsRepositorySpy.callsCount).toBe(1)
   })
