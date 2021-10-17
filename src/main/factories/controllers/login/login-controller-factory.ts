@@ -1,17 +1,11 @@
-import { DbAuthentication } from '@/data/usecases'
-import { JwtAdapter, BcrypterAdapter } from '@/infra/cryptography'
-import { AccountMongoRepository } from '@/infra/db/mongodb'
-import env from '@/main/config/env'
+import { makeLogControllerDecorator } from '@/main/factories/decorators'
+import { makeDbAuthentication } from '@/main/factories/usecases'
 import { LoginController } from '@/presentation/controllers'
+import { Controller } from '@/presentation/protocols'
 
 import { makeLoginValidation } from './login-validation-factory'
 
-export const makeLoginController = (): LoginController => {
-  const salt = 12
-  const accountMongoRepository = new AccountMongoRepository()
-  const bcrypterAdapter = new BcrypterAdapter(salt)
-  const jwtAdapter = new JwtAdapter(env.jwtSecretKey)
-  const authentication = new DbAuthentication(accountMongoRepository, bcrypterAdapter, jwtAdapter, accountMongoRepository)
-  const validation = makeLoginValidation()
-  return new LoginController(authentication, validation)
+export const makeLoginController = (): Controller => {
+  const controller = new LoginController(makeDbAuthentication(), makeLoginValidation())
+  return makeLogControllerDecorator(controller)
 }

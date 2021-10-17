@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt'
 
-import { BcrypterAdapter } from './bcrypter-adapter'
+import { BcryptAdapter } from './bcrypter-adapter'
 
 const salt = 12
 
-const makeSut = (): BcrypterAdapter => {
-  return new BcrypterAdapter(salt)
+const makeSut = (): BcryptAdapter => {
+  return new BcryptAdapter(salt)
 }
 
 jest.mock('bcrypt', () => ({
