@@ -1,4 +1,5 @@
 import { LoadMonitorings } from '@/domain/usecases'
+import { serverError } from '@/presentation/helpers'
 
 import { LoadMonitoringsController } from './load-monitorings'
 
@@ -30,5 +31,13 @@ describe('LoadMonitorings Controller', () => {
     const { sut, loadMonitoringsSpy } = makeSut()
     await sut.handle({})
     expect(loadMonitoringsSpy.callsCount).toBe(1)
+  })
+
+  it('should return 500 if LoadMonitorings throws', async () => {
+    const { sut, loadMonitoringsSpy } = makeSut()
+    const error = new Error()
+    jest.spyOn(loadMonitoringsSpy, 'load').mockReturnValueOnce(Promise.reject(error))
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(serverError(error))
   })
 })
