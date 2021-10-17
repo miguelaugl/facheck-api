@@ -7,7 +7,7 @@ export class DbLoadMonitoringById implements LoadMonitoringById {
   ) {}
 
   async load (monitoringId: string): Promise<LoadMonitoringById.Result> {
-    await this.loadMonitoringByIdRepository.loadById(monitoringId)
-    return null
+    const monitoring = await this.loadMonitoringByIdRepository.loadById(monitoringId)
+    return monitoring
   }
 }
