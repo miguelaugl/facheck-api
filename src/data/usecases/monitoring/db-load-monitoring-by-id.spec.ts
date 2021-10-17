@@ -41,4 +41,10 @@ describe('DbLoadMonitoringById Usecase', () => {
     const promise = sut.load('any_id')
     await expect(promise).rejects.toThrow()
   })
+
+  it('should return a monitoring on success', async () => {
+    const { sut, loadMonitoringByIdRepositorySpy } = makeSut()
+    const monitoring = await sut.load('any_id')
+    expect(monitoring).toEqual(loadMonitoringByIdRepositorySpy.result)
+  })
 })
