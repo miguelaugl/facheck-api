@@ -16,10 +16,23 @@ class LoadMonitoringByIdSpy implements LoadMonitoringById {
   }
 }
 
+type SutTypes = {
+  sut: LoadMonitoringByIdController
+  loadMonitoringByIdSpy: LoadMonitoringByIdSpy
+}
+
+const makeSut = (): SutTypes => {
+  const loadMonitoringByIdSpy = new LoadMonitoringByIdSpy()
+  const sut = new LoadMonitoringByIdController(loadMonitoringByIdSpy)
+  return {
+    sut,
+    loadMonitoringByIdSpy,
+  }
+}
+
 describe('LoadMonitoringById Controller', () => {
   it('should call LoadMonitoringById with correct id', async () => {
-    const loadMonitoringByIdSpy = new LoadMonitoringByIdSpy()
-    const sut = new LoadMonitoringByIdController(loadMonitoringByIdSpy)
+    const { sut, loadMonitoringByIdSpy } = makeSut()
     const httpRequest: HttpRequest = {
       params: {
         monitoringId: monitoringModel.id,
