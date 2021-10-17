@@ -3,7 +3,7 @@ import MockDate from 'mockdate'
 import { Collection } from 'mongodb'
 import request from 'supertest'
 
-import { mockAddMonitoringParams, mockMonitoringModels } from '@/domain/tests'
+import { mockAddMonitoringParams, mockMonitoringModel, mockMonitoringModels } from '@/domain/tests'
 import { MongoHelper } from '@/infra/db/mongodb'
 import app from '@/main/config/app'
 import env from '@/main/config/env'
@@ -89,6 +89,23 @@ describe('Login Routes', () => {
         .get('/api/monitorings')
         .set('x-access-token', accessToken)
         .expect(HttpStatusCode.NO_CONTENT)
+    })
+  })
+
+  describe('GET /monitorings/:monitoringId', () => {
+    it('should return 403 on load monitoring without accessToken', async () => {
+      await request(app)
+        .get('/api/monitorings/any_id')
+        .expect(HttpStatusCode.FORBIDDEN)
+    })
+
+    it('should return 200 on load monitoring with valid token', async () => {
+      const res = await monitoringCollection.insertOne(mockMonitoringModel())
+      const accessToken = await makeAccessToken()
+      await request(app)
+        .get(`/api/monitorings/${res.insertedId.toString()}`)
+        .set('x-access-token', accessToken)
+        .expect(HttpStatusCode.OK)
     })
   })
 })
