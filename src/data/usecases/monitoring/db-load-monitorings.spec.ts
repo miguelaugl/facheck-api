@@ -33,4 +33,11 @@ describe('DbLoadMonitorings Usecase', () => {
     await sut.load()
     expect(loadMonitoringsRepositorySpy.callsCount).toBe(1)
   })
+
+  it('should throw if LoadMonitoringsRepository throws', async () => {
+    const { sut, loadMonitoringsRepositorySpy } = makeSut()
+    jest.spyOn(loadMonitoringsRepositorySpy, 'loadAll').mockReturnValueOnce(Promise.reject(new Error()))
+    const promise = sut.load()
+    await expect(promise).rejects.toThrow()
+  })
 })
