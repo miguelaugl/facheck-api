@@ -11,7 +11,7 @@ class LoadAccountByTokenSpy implements LoadAccountByToken {
   role?: string
   result = mockAccountModel()
 
-  async loadAccountByToken (accessToken: string, role?: string): Promise<LoadAccountByToken.Result> {
+  async load (accessToken: string, role?: string): Promise<LoadAccountByToken.Result> {
     this.accessToken = accessToken
     this.role = role
     return this.result
@@ -55,7 +55,7 @@ describe('Auth Middleware', () => {
 
   it('should return 403 if LoadAccountByToken returns null', async () => {
     const { sut, loadAccountByTokenSpy } = makeSut()
-    jest.spyOn(loadAccountByTokenSpy, 'loadAccountByToken').mockReturnValueOnce(null)
+    jest.spyOn(loadAccountByTokenSpy, 'load').mockReturnValueOnce(null)
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(forbidden(new AccessDeniedError()))
   })
@@ -70,7 +70,7 @@ describe('Auth Middleware', () => {
   it('should return 500 if LoadAccountByToken throws', async () => {
     const { sut, loadAccountByTokenSpy } = makeSut()
     const error = new Error()
-    jest.spyOn(loadAccountByTokenSpy, 'loadAccountByToken').mockReturnValueOnce(Promise.reject(error))
+    jest.spyOn(loadAccountByTokenSpy, 'load').mockReturnValueOnce(Promise.reject(error))
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(error))
   })
