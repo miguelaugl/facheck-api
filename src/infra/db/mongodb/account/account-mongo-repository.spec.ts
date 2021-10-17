@@ -102,5 +102,17 @@ describe('Account Mongo Repository', () => {
       expect(account).toBeTruthy()
       expect(account.accessToken).toBe(accessToken)
     })
+
+    it('should return null if load fails', async () => {
+      const addAccountParams = mockAddAccountParams()
+      const accessToken = 'any_token'
+      await accountCollection.insertOne({
+        ...addAccountParams,
+        accessToken,
+      })
+      const sut = makeSut()
+      const account = await sut.loadByToken('invalid_token')
+      expect(account).toBeFalsy()
+    })
   })
 })
