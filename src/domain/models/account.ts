@@ -6,6 +6,6 @@ export type AccountModel = {
   ra: string
   course: string
   cpf: string
-  isMonitor?: boolean
+  role?: string
   accessToken?: string
 }
