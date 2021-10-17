@@ -8,7 +8,7 @@ class LoadAccountByTokenRepositorySpy implements LoadAccountByTokenRepository {
   role?: string
   result = mockAccountModel()
 
-  async loadAccountByToken (accessToken: string, role?: string): Promise<LoadAccountByTokenRepository.Result> {
+  async loadByToken (accessToken: string, role?: string): Promise<LoadAccountByTokenRepository.Result> {
     this.accessToken = accessToken
     this.role = role
     return this.result
@@ -65,7 +65,7 @@ describe('DbLoadAccountByToken Usecase', () => {
 
   it('should return null if LoadAccountByTokenRepository returns null', async () => {
     const { sut, loadAccountByTokenRepositorySpy } = makeSut()
-    jest.spyOn(loadAccountByTokenRepositorySpy, 'loadAccountByToken').mockReturnValueOnce(null)
+    jest.spyOn(loadAccountByTokenRepositorySpy, 'loadByToken').mockReturnValueOnce(null)
     const account = await sut.load('any_token')
     expect(account).toBe(null)
   })
@@ -85,7 +85,7 @@ describe('DbLoadAccountByToken Usecase', () => {
 
   it('should throw if LoadAccountByTokenRepository throws', async () => {
     const { sut, loadAccountByTokenRepositorySpy } = makeSut()
-    jest.spyOn(loadAccountByTokenRepositorySpy, 'loadAccountByToken').mockReturnValueOnce(Promise.reject(new Error()))
+    jest.spyOn(loadAccountByTokenRepositorySpy, 'loadByToken').mockReturnValueOnce(Promise.reject(new Error()))
     const promise = sut.load('any_token')
     await expect(promise).rejects.toThrow()
   })

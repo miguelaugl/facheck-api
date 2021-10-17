@@ -7,4 +7,5 @@ export type AccountModel = {
   course: string
   cpf: string
   isMonitor?: boolean
+  accessToken?: string
 }
