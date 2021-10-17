@@ -13,10 +13,23 @@ class LoadMonitoringByIdRepositorySpy implements LoadMonitoringByIdRepository {
   }
 }
 
+type SutTypes = {
+  sut: DbLoadMonitoringById
+  loadMonitoringByIdRepositorySpy: LoadMonitoringByIdRepositorySpy
+}
+
+const makeSut = (): SutTypes => {
+  const loadMonitoringByIdRepositorySpy = new LoadMonitoringByIdRepositorySpy()
+  const sut = new DbLoadMonitoringById(loadMonitoringByIdRepositorySpy)
+  return {
+    sut,
+    loadMonitoringByIdRepositorySpy,
+  }
+}
+
 describe('DbLoadMonitoringById Usecase', () => {
   it('should call LoadMonitoringByIdRepository with correct id', async () => {
-    const loadMonitoringByIdRepositorySpy = new LoadMonitoringByIdRepositorySpy()
-    const sut = new DbLoadMonitoringById(loadMonitoringByIdRepositorySpy)
+    const { sut, loadMonitoringByIdRepositorySpy } = makeSut()
     const monitoringId = 'any_id'
     await sut.load(monitoringId)
     expect(loadMonitoringByIdRepositorySpy.monitoringId).toBe(monitoringId)
