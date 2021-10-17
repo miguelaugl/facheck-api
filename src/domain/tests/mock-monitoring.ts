@@ -17,3 +17,16 @@ export const mockAddMonitoringParams = (): AddMonitoring.Params => ({
   endDate: new Date(),
   room: 16,
 })
+
+export const mockMonitoringModels = (): MonitoringModel[] => ([
+  mockMonitoringModel(),
+  {
+    id: 'other_id',
+    monitorId: 'other_monitor_id',
+    subject: 'other_subject',
+    initDate: new Date(),
+    endDate: new Date(),
+    room: 2,
+    maxStudents: 10,
+  },
+])
