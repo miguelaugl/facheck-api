@@ -1,7 +1,7 @@
 import { AddAccount, Authentication } from '@/domain/usecases'
 import { EmailInUseError, MissingParamError, ServerError } from '@/presentation/errors'
 import { badRequest, forbidden, ok, serverError } from '@/presentation/helpers'
-import { HttpRequest } from '@/presentation/protocols/http'
+import { HttpRequest } from '@/presentation/protocols'
 import { mockAddAccount, mockAuthentication, ValidationSpy } from '@/presentation/tests'
 
 import { SignUpController } from './signup'

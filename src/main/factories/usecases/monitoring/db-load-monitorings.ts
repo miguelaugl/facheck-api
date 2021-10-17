@@ -1,5 +1,5 @@
-import { DbLoadMonitorings } from '@/data/usecases/monitoring/db-load-monitorings'
-import { MonitoringMongoRepository } from '@/infra/db/mongodb/monitoring/monitoring-mongo-repository'
+import { DbLoadMonitorings } from '@/data/usecases'
+import { MonitoringMongoRepository } from '@/infra/db/mongodb'
 
 export const makeDbLoadMonitorings = (): DbLoadMonitorings => {
   const monitoringMongoRepository = new MonitoringMongoRepository()

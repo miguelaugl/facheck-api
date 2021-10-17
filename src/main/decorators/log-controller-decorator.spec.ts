@@ -1,6 +1,6 @@
 
 import { LogErrorRepository } from '@/data/protocols'
-import { mockLogErrorRepository } from '@/data/tests/mock-log'
+import { mockLogErrorRepository } from '@/data/tests'
 import { ok, serverError } from '@/presentation/helpers'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 

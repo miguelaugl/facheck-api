@@ -1,6 +1,6 @@
 import { DbAddMonitoring } from '@/data/usecases'
-import { MonitoringMongoRepository } from '@/infra/db/mongodb/monitoring/monitoring-mongo-repository'
-import { AddMonitoringController } from '@/presentation/controllers/monitoring/add-monitoring'
+import { MonitoringMongoRepository } from '@/infra/db/mongodb'
+import { AddMonitoringController } from '@/presentation/controllers'
 
 import { makeAddMonitoringValidation } from './add-monitoring-validation-factory'
 

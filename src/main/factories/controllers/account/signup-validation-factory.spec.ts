@@ -1,4 +1,4 @@
-import { CpfValidatorAdapter } from '@/infra/validators/cpf-validator-adapter'
+import { CpfValidatorAdapter } from '@/infra/validators'
 import { Validation } from '@/validation/protocols'
 import { CompareFieldsValidation, CpfValidation, EmailValidation, RequiredFieldValidation, ValidationComposite } from '@/validation/validators'
 

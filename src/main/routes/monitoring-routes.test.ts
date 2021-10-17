@@ -6,9 +6,8 @@ import request from 'supertest'
 import { mockAddMonitoringParams } from '@/domain/tests'
 import { MongoHelper } from '@/infra/db/mongodb'
 import app from '@/main/config/app'
+import env from '@/main/config/env'
 import { HttpStatusCode } from '@/presentation/protocols'
-
-import env from '../config/env'
 
 let monitoringCollection: Collection
 let accountCollection: Collection
