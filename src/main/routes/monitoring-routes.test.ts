@@ -3,11 +3,30 @@ import MockDate from 'mockdate'
 import { Collection } from 'mongodb'
 import request from 'supertest'
 
-import { mockAddMonitoringParams } from '@/domain/tests'
+import { mockAddMonitoringParams, mockMonitoringModels } from '@/domain/tests'
 import { MongoHelper } from '@/infra/db/mongodb'
 import app from '@/main/config/app'
 import env from '@/main/config/env'
 import { HttpStatusCode } from '@/presentation/protocols'
+
+const makeAccessToken = async (): Promise<string> => {
+  const result = await accountCollection.insertOne({
+    name: 'Miguel',
+    email: 'realmail@outlook.com',
+    password: '123',
+    role: 'monitor',
+  })
+  const accountId = result.insertedId
+  const accessToken = sign({ id: accountId }, env.jwtSecretKey)
+  await accountCollection.updateOne({
+    _id: accountId,
+  }, {
+    $set: {
+      accessToken,
+    },
+  })
+  return accessToken
+}
 
 let monitoringCollection: Collection
 let accountCollection: Collection
@@ -39,26 +58,29 @@ describe('Login Routes', () => {
     })
 
     it('should return 204 on add monitoring with valid token', async () => {
-      const result = await accountCollection.insertOne({
-        name: 'Miguel',
-        email: 'realmail@outlook.com',
-        password: '123',
-        role: 'monitor',
-      })
-      const accountId = result.insertedId
-      const accessToken = sign({ id: accountId }, env.jwtSecretKey)
-      await accountCollection.updateOne({
-        _id: accountId,
-      }, {
-        $set: {
-          accessToken,
-        },
-      })
+      const accessToken = await makeAccessToken()
       await request(app)
         .post('/api/monitorings')
         .set('x-access-token', accessToken)
         .send(mockAddMonitoringParams())
         .expect(HttpStatusCode.NO_CONTENT)
+    })
+  })
+
+  describe('GET /monitorings', () => {
+    it('should return 403 on load monitorings without accessToken', async () => {
+      await request(app)
+        .get('/api/monitorings')
+        .expect(HttpStatusCode.FORBIDDEN)
+    })
+
+    it('should return 200 on load monitorings with valid accessToken', async () => {
+      const accessToken = await makeAccessToken()
+      await monitoringCollection.insertMany(mockMonitoringModels())
+      await request(app)
+        .get('/api/monitorings')
+        .set('x-access-token', accessToken)
+        .expect(HttpStatusCode.OK)
     })
   })
 })
