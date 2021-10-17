@@ -10,7 +10,7 @@ export namespace AddAccount {
     ra: string
     course: string
     cpf: string
-    isMonitor?: boolean
+    role?: string
   }
   export type Result = boolean
 }

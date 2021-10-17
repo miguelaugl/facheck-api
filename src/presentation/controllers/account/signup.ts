@@ -15,7 +15,7 @@ export class SignUpController implements Controller {
       if (error) {
         return badRequest(error)
       }
-      const { name, email, password, cpf, ra, course } = httpRequest.body
+      const { name, email, password, cpf, ra, course, role } = httpRequest.body
       const account = await this.addAccount.add({
         name,
         course,
@@ -23,6 +23,7 @@ export class SignUpController implements Controller {
         email,
         password,
         ra,
+        role,
       })
       return ok(account)
     } catch (error) {
