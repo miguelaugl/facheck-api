@@ -9,7 +9,7 @@ class LoadMonitoringsRepositorySpy implements LoadMonitoringsRepository {
 
   async loadAll (): Promise<LoadMonitoringsRepository.Result> {
     this.callsCount = this.callsCount + 1
-    return mockMonitoringModels()
+    return this.result
   }
 }
 
@@ -39,5 +39,11 @@ describe('DbLoadMonitorings Usecase', () => {
     jest.spyOn(loadMonitoringsRepositorySpy, 'loadAll').mockReturnValueOnce(Promise.reject(new Error()))
     const promise = sut.load()
     await expect(promise).rejects.toThrow()
+  })
+
+  it('should return a list of monitorings', async () => {
+    const { sut, loadMonitoringsRepositorySpy } = makeSut()
+    const monitorings = await sut.load()
+    expect(monitorings).toEqual(loadMonitoringsRepositorySpy.result)
   })
 })
