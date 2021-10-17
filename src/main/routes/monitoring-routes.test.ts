@@ -82,5 +82,13 @@ describe('Login Routes', () => {
         .set('x-access-token', accessToken)
         .expect(HttpStatusCode.OK)
     })
+
+    it('should return 204 on load monitorings with valid accessToken and empty list', async () => {
+      const accessToken = await makeAccessToken()
+      await request(app)
+        .get('/api/monitorings')
+        .set('x-access-token', accessToken)
+        .expect(HttpStatusCode.NO_CONTENT)
+    })
   })
 })
