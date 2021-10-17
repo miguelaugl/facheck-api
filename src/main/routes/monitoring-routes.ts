@@ -1,10 +1,12 @@
 import { Router } from 'express'
 
-import { adaptRoute, adaptMiddleware } from '@/main/adapters'
+import { adaptRoute } from '@/main/adapters'
 import { makeAddMonitoringController } from '@/main/factories/controllers'
-import { makeAuthMiddleware } from '@/main/factories/middlewares'
+import { monitorAuth } from '@/main/middlewares'
+
+import { makeLoadMonitoringsController } from '../factories/controllers'
 
 export default (router: Router): void => {
-  const monitorAuth = adaptMiddleware(makeAuthMiddleware('monitor'))
   router.post('/monitorings', monitorAuth, adaptRoute(makeAddMonitoringController()))
+  router.get('/monitorings', monitorAuth, adaptRoute(makeLoadMonitoringsController()))
 }
