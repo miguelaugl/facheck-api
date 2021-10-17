@@ -1,5 +1,5 @@
 import { LoadMonitoringById } from '@/domain/usecases'
-import { serverError } from '@/presentation/helpers'
+import { ok, serverError } from '@/presentation/helpers'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 
 export class LoadMonitoringByIdController implements Controller {
@@ -9,8 +9,8 @@ export class LoadMonitoringByIdController implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      await this.loadMonitoringById.load(httpRequest.params?.monitoringId)
-      return null
+      const monitoring = await this.loadMonitoringById.load(httpRequest.params?.monitoringId)
+      return ok(monitoring)
     } catch (error) {
       return serverError(error)
     }
