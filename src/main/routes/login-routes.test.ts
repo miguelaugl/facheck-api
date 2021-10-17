@@ -4,6 +4,7 @@ import request from 'supertest'
 
 import { MongoHelper } from '@/infra/db/mongodb'
 import app from '@/main/config/app'
+import { HttpStatusCode } from '@/presentation/protocols'
 
 let accountCollection: Collection
 
@@ -35,7 +36,7 @@ describe('Login Routes', () => {
           email: 'realemail@mail.com',
           password: '12345',
         })
-        .expect(200)
+        .expect(HttpStatusCode.OK)
     })
   })
 
@@ -52,7 +53,7 @@ describe('Login Routes', () => {
           course: 'ADS',
           cpf: '85790781055',
         })
-        .expect(200)
+        .expect(HttpStatusCode.OK)
     })
   })
 })

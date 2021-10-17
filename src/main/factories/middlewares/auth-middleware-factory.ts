@@ -1,8 +1,8 @@
-import { DbLoadAccountByToken } from '@/data/usecases/account/db-load-account-by-token'
+import { DbLoadAccountByToken } from '@/data/usecases'
 import { JwtAdapter } from '@/infra/cryptography'
 import { AccountMongoRepository } from '@/infra/db/mongodb'
 import env from '@/main/config/env'
-import { AuthMiddleware } from '@/presentation/middlewares/auth-middleware'
+import { AuthMiddleware } from '@/presentation/middlewares'
 import { Middleware } from '@/presentation/protocols'
 
 export const makeAuthMiddleware = (role?: string): Middleware => {

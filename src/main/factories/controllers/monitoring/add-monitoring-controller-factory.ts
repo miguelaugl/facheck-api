@@ -1,4 +1,4 @@
-import { DbAddMonitoring } from '@/data/usecases/monitoring/db-add-monitoring'
+import { DbAddMonitoring } from '@/data/usecases'
 import { MonitoringMongoRepository } from '@/infra/db/mongodb/monitoring/monitoring-mongo-repository'
 import { AddMonitoringController } from '@/presentation/controllers/monitoring/add-monitoring'
 
