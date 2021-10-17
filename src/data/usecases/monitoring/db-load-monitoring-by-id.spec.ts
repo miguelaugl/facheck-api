@@ -28,10 +28,17 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbLoadMonitoringById Usecase', () => {
-  it('should call LoadMonitoringByIdRepository with correct id', async () => {
+  it('should call LoadMonitoringByIdRepositorySpy with correct id', async () => {
     const { sut, loadMonitoringByIdRepositorySpy } = makeSut()
     const monitoringId = 'any_id'
     await sut.load(monitoringId)
     expect(loadMonitoringByIdRepositorySpy.monitoringId).toBe(monitoringId)
+  })
+
+  it('should throw if LoadMonitoringByIdRepositorySpy throws', async () => {
+    const { sut, loadMonitoringByIdRepositorySpy } = makeSut()
+    jest.spyOn(loadMonitoringByIdRepositorySpy, 'loadById').mockReturnValueOnce(Promise.reject(new Error()))
+    const promise = sut.load('any_id')
+    await expect(promise).rejects.toThrow()
   })
 })
