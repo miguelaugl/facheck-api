@@ -1,7 +1,8 @@
 
 import { mockMonitoringModel } from '@/domain/tests'
 import { LoadMonitoringById } from '@/domain/usecases'
-import { serverError, ok } from '@/presentation/helpers'
+import { InvalidParamError } from '@/presentation/errors'
+import { serverError, ok, forbidden } from '@/presentation/helpers'
 import { HttpRequest } from '@/presentation/protocols'
 
 import { LoadMonitoringByIdController } from './load-monitoring-by-id'
@@ -51,6 +52,13 @@ describe('LoadMonitoringById Controller', () => {
     jest.spyOn(loadMonitoringByIdSpy, 'load').mockReturnValueOnce(Promise.reject(error))
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(error))
+  })
+
+  it('should return 403 if LoadMonitoringById returns null', async () => {
+    const { sut, loadMonitoringByIdSpy } = makeSut()
+    jest.spyOn(loadMonitoringByIdSpy, 'load').mockReturnValueOnce(null)
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(forbidden(new InvalidParamError('monitoringId')))
   })
 
   it('should return 200 on success', async () => {
