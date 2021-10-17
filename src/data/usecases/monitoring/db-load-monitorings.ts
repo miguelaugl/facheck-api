@@ -7,7 +7,7 @@ export class DbLoadMonitorings implements LoadMonitorings {
   ) {}
 
   async load (): Promise<LoadMonitorings.Result> {
-    await this.loadMonitoringsRepository.loadAll()
-    return null
+    const monitorings = await this.loadMonitoringsRepository.loadAll()
+    return monitorings
   }
 }
