@@ -1,6 +1,7 @@
+
 import { mockMonitoringModel } from '@/domain/tests'
 import { LoadMonitoringById } from '@/domain/usecases'
-import { serverError } from '@/presentation/helpers'
+import { serverError, ok } from '@/presentation/helpers'
 import { HttpRequest } from '@/presentation/protocols'
 
 import { LoadMonitoringByIdController } from './load-monitoring-by-id'
@@ -50,5 +51,11 @@ describe('LoadMonitoringById Controller', () => {
     jest.spyOn(loadMonitoringByIdSpy, 'load').mockReturnValueOnce(Promise.reject(error))
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(error))
+  })
+
+  it('should return 200 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(ok(monitoringModel))
   })
 })
