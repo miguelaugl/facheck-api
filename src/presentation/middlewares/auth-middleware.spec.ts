@@ -3,6 +3,7 @@ import { LoadAccountByToken } from '@/domain/usecases'
 import { AccessDeniedError } from '@/presentation/errors'
 import { forbidden } from '@/presentation/helpers'
 
+import { HttpRequest } from '../protocols'
 import { AuthMiddleware } from './auth-middleware'
 
 class LoadAccountByTokenSpy implements LoadAccountByToken {
@@ -19,6 +20,12 @@ type SutTypes = {
   sut: AuthMiddleware
   loadAccountByTokenSpy: LoadAccountByTokenSpy
 }
+
+const mockRequest = (): HttpRequest => ({
+  headers: {
+    'x-access-token': 'any_token',
+  },
+})
 
 const makeSut = (): SutTypes => {
   const loadAccountByTokenSpy = new LoadAccountByTokenSpy()
@@ -38,12 +45,14 @@ describe('Auth Middleware', () => {
 
   it('should call LoadAccountByToken with correct accessToken', async () => {
     const { sut, loadAccountByTokenSpy } = makeSut()
-    const accessToken = 'any_token'
-    await sut.handle({
-      headers: {
-        'x-access-token': accessToken,
-      },
-    })
-    expect(loadAccountByTokenSpy.accessToken).toEqual(accessToken)
+    await sut.handle(mockRequest())
+    expect(loadAccountByTokenSpy.accessToken).toEqual('any_token')
+  })
+
+  it('should return 403 if LoadAccountByToken returns null', async () => {
+    const { sut, loadAccountByTokenSpy } = makeSut()
+    jest.spyOn(loadAccountByTokenSpy, 'loadAccountByToken').mockReturnValueOnce(null)
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(forbidden(new AccessDeniedError()))
   })
 })
