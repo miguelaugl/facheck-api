@@ -38,4 +38,21 @@ describe('Login Routes', () => {
         .expect(200)
     })
   })
+
+  describe('POST /signup', () => {
+    it('should return 200 on signup', async () => {
+      await request(app)
+        .post('/api/signup')
+        .send({
+          name: 'Miguel Augusto',
+          email: 'realemail@mail.com',
+          password: '12345',
+          passwordConfirmation: '12345',
+          ra: '1780481911025',
+          course: 'ADS',
+          cpf: '85790781055',
+        })
+        .expect(200)
+    })
+  })
 })
