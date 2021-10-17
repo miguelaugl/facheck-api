@@ -21,8 +21,16 @@ type SutTypes = {
   validationSpy: ValidationSpy
 }
 
+const addMonitoringsParams = mockAddMonitoringParams()
+
 const mockRequest = (): HttpRequest => ({
-  body: mockAddMonitoringParams(),
+  accountId: addMonitoringsParams.monitorId,
+  body: {
+    subject: addMonitoringsParams.subject,
+    initDate: addMonitoringsParams.initDate,
+    endDate: addMonitoringsParams.endDate,
+    room: addMonitoringsParams.room,
+  },
 })
 
 const makeSut = (): SutTypes => {
@@ -41,7 +49,7 @@ describe('AddMonitoring Controller', () => {
     const { sut, addMonitoringSpy } = makeSut()
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
-    expect(addMonitoringSpy.params).toEqual(httpRequest.body)
+    expect(addMonitoringSpy.params).toEqual(addMonitoringsParams)
   })
 
   it('should return 500 if AddSurvey throws', async () => {

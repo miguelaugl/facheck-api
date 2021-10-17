@@ -4,6 +4,7 @@ export interface AddMonitoring {
 
 export namespace AddMonitoring {
   export type Params = {
+    monitorId: string
     subject: string
     initDate: Date
     endDate: Date
