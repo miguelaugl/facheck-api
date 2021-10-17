@@ -1,6 +1,6 @@
 import { Collection } from 'mongodb'
 
-import { mockAddMonitoringParams, mockMonitoringModels } from '@/domain/tests'
+import { mockAddMonitoringParams, mockMonitoringModel, mockMonitoringModels } from '@/domain/tests'
 import { MongoHelper } from '@/infra/db/mongodb'
 
 import { MonitoringMongoRepository } from './monitoring-mongo-repository'
@@ -50,6 +50,18 @@ describe('Monitoring Mongo Repository', () => {
       const sut = makeSut()
       const monitorings = await sut.loadAll()
       expect(monitorings).toEqual([])
+    })
+  })
+
+  describe('loadById()', () => {
+    it('should load a monitoring by id on success', async () => {
+      const monitoringModel = mockMonitoringModel()
+      const res = await monitoringsCollection.insertOne(monitoringModel)
+      const sut = makeSut()
+      const monitoring = await sut.loadById(res.insertedId.toString())
+      expect(monitoring.id).toBeTruthy()
+      expect(monitoring.id).toEqual(res.insertedId)
+      expect(monitoring.subject).toBe(monitoringModel.subject)
     })
   })
 })
