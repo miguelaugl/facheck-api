@@ -18,7 +18,6 @@ export class AddMonitoringController implements Controller {
       await this.addMonitoring.add(httpRequest.body)
       return noContent()
     } catch (error) {
-      console.log(error)
       return serverError(error)
     }
   }

@@ -56,15 +56,14 @@ describe('Auth Middleware', () => {
   it('should return 403 if LoadAccountByToken returns null', async () => {
     const { sut, loadAccountByTokenSpy } = makeSut()
     jest.spyOn(loadAccountByTokenSpy, 'load').mockReturnValueOnce(null)
-    const httpResponse = await sut.handle({})
+    const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(forbidden(new AccessDeniedError()))
   })
 
   it('should return 200 if LoadAccountByToken returns an account', async () => {
-    const { sut } = makeSut()
-    const account = mockAccountModel()
+    const { sut, loadAccountByTokenSpy } = makeSut()
     const httpResponse = await sut.handle(mockRequest())
-    expect(httpResponse).toEqual(ok({ accountId: account.id }))
+    expect(httpResponse).toEqual(ok({ accountId: loadAccountByTokenSpy.result.id }))
   })
 
   it('should return 500 if LoadAccountByToken throws', async () => {
