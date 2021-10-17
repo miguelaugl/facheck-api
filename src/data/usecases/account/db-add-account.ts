@@ -1,10 +1,11 @@
-import { Hasher, AddAccountRepository } from '@/data/protocols'
+import { Hasher, AddAccountRepository, LoadAccountByEmailRepository } from '@/data/protocols'
 import { AddAccount } from '@/domain/usecases'
 
 export class DbAddAccount implements AddAccount {
   constructor (
     private readonly hasher: Hasher,
     private readonly addAccountRepository: AddAccountRepository,
+    private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
   ) {}
 
   async add (accountData: AddAccount.Params): Promise<AddAccount.Result> {
@@ -13,6 +14,7 @@ export class DbAddAccount implements AddAccount {
       ...accountData,
       password: hashedPassword,
     })
+    await this.loadAccountByEmailRepository.loadByEmail(accountData.email)
     return isValid
   }
 }
