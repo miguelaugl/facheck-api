@@ -10,7 +10,8 @@ export class LoadMonitoringByIdController implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const monitoring = await this.loadMonitoringById.load(httpRequest.params?.monitoringId)
+      const { monitoringId } = httpRequest.params
+      const monitoring = await this.loadMonitoringById.load(monitoringId)
       if (!monitoring) {
         return forbidden(new InvalidParamError('monitoringId'))
       }
