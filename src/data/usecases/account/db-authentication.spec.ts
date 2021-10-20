@@ -86,10 +86,13 @@ describe('DbAuthentication Usecase', () => {
     await expect(promise).rejects.toThrow()
   })
 
-  it('should return accessToken if Encrypter succeeds', async () => {
+  it('should return payload if Encrypter succeeds', async () => {
     const { sut } = makeSut()
-    const accessToken = await sut.auth(mockAuthenticationParams())
-    expect(accessToken).toBe('any_token')
+    const payload = await sut.auth(mockAuthenticationParams())
+    expect(payload).toEqual({
+      accessToken: 'any_token',
+      name: 'any_name',
+    })
   })
 
   it('should call UpdateAccessTokenRepository with correct values', async () => {
