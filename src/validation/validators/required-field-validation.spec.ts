@@ -18,4 +18,10 @@ describe('RequiredField Validation', () => {
     const error = sut.validate({ email: 'any_email@mail.com' })
     expect(error).toBeFalsy()
   })
+
+  it('should not return if receives zero ', () => {
+    const sut = makeSut()
+    const error = sut.validate({ email: 0 })
+    expect(error).toBeFalsy()
+  })
 })
