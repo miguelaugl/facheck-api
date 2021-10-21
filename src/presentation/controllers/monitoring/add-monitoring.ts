@@ -15,15 +15,15 @@ export class AddMonitoringController implements Controller {
       if (error) {
         return badRequest(error)
       }
-      const { subject, initDate, endDate, room, maxStudents } = httpRequest.body
+      const { subject, weekday, initHour, endHour, room } = httpRequest.body
       const monitorId = httpRequest.accountId
       await this.addMonitoring.add({
         monitorId,
         subject,
-        initDate,
-        endDate,
+        weekday,
+        initHour,
+        endHour,
         room,
-        maxStudents,
       })
       return noContent()
     } catch (error) {

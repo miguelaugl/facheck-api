@@ -27,8 +27,9 @@ const mockRequest = (): HttpRequest => ({
   accountId: addMonitoringsParams.monitorId,
   body: {
     subject: addMonitoringsParams.subject,
-    initDate: addMonitoringsParams.initDate,
-    endDate: addMonitoringsParams.endDate,
+    weekday: addMonitoringsParams.weekday,
+    initHour: addMonitoringsParams.initHour,
+    endHour: addMonitoringsParams.endHour,
     room: addMonitoringsParams.room,
   },
 })
@@ -55,7 +56,7 @@ describe('AddMonitoring Controller', () => {
   it('should return 500 if AddSurvey throws', async () => {
     const { sut, addMonitoringSpy } = makeSut()
     const error = new Error()
-    jest.spyOn(addMonitoringSpy, 'add').mockReturnValueOnce(Promise.reject(error))
+    jest.spyOn(addMonitoringSpy, 'add').mockImplementationOnce(() => { throw error })
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(serverError(error))
   })

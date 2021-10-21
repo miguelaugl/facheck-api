@@ -1,7 +1,7 @@
 import MockDate from 'mockdate'
 
 import { Validation } from '@/validation/protocols'
-import { PastDateValidation, RequiredFieldValidation, ValidationComposite } from '@/validation/validators'
+import { RequiredFieldValidation, ValidationComposite } from '@/validation/validators'
 
 import { makeAddMonitoringValidation } from './add-monitoring-validation-factory'
 
@@ -19,10 +19,9 @@ describe('AddMonitoringValidation Factory', () => {
   it('should call ValidationComposite with all validations', () => {
     makeAddMonitoringValidation()
     const validations: Validation[] = []
-    for (const field of ['subject', 'initDate', 'endDate', 'room']) {
+    for (const field of ['subject', 'weekday', 'initHour', 'endHour', 'room']) {
       validations.push(new RequiredFieldValidation(field))
     }
-    validations.push(new PastDateValidation('initDate'))
     expect(ValidationComposite).toHaveBeenCalledWith(validations)
   })
 })
