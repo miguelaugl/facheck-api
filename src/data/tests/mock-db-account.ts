@@ -1,5 +1,11 @@
 import { AddAccountRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository } from '@/data/protocols'
-import { mockAccountModel } from '@/domain/tests'
+
+export const mockLoadAccountByEmailRepositoryResult = (): LoadAccountByEmailRepository.Result => ({
+  id: 'any_id',
+  name: 'any_name',
+  password: 'hashed_password',
+  role: 'any_role',
+})
 
 export const mockAddAccountRepository = (): AddAccountRepository => {
   class AddAccountRepositoryStub implements AddAccountRepository {
@@ -20,7 +26,7 @@ export const mockUpdateAccessTokenRepository = (): UpdateAccessTokenRepository =
 export const mockLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
     async loadByEmail (email: string): Promise<LoadAccountByEmailRepository.Result> {
-      return mockAccountModel()
+      return mockLoadAccountByEmailRepositoryResult()
     }
   }
   return new LoadAccountByEmailRepositoryStub()

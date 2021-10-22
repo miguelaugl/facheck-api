@@ -17,6 +17,7 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
         _id: 1,
         name: 1,
         password: 1,
+        role: 1,
       },
     })
     return account && MongoHelper.map(account)

@@ -34,14 +34,15 @@ describe('Account Mongo Repository', () => {
   })
 
   describe('loadByEmail()', () => {
-    it('should return an account on success', async () => {
-      const addAccountParams = mockAddAccountParams()
-      await accountCollection.insertOne(addAccountParams)
+    it('should return an account with role on success', async () => {
+      const accountModel = { ...mockAddAccountParams(), role: 'any_role' }
+      await accountCollection.insertOne(accountModel)
       const sut = makeSut()
-      const account = await sut.loadByEmail(addAccountParams.email)
+      const account = await sut.loadByEmail(accountModel.email)
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
-      expect(account.name).toBe(addAccountParams.name)
+      expect(account.name).toBe(accountModel.name)
+      expect(account.role).toBe(accountModel.role)
     })
 
     it('should return null if load fails', async () => {

@@ -92,6 +92,7 @@ describe('DbAuthentication Usecase', () => {
     expect(payload).toEqual({
       accessToken: 'any_token',
       name: 'any_name',
+      role: 'any_role',
     })
   })
 

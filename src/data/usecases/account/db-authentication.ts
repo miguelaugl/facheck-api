@@ -23,6 +23,7 @@ export class DbAuthentication implements Authentication {
     return {
       accessToken,
       name: account.name,
+      role: account.role,
     }
   }
 }
