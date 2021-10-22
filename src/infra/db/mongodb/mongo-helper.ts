@@ -19,6 +19,11 @@ export const MongoHelper = {
   },
 
   map (data: any): any {
+    Object.entries(data).forEach(function ([key, value]) {
+      if (key !== '_id' && value instanceof Object) {
+        data[key] = MongoHelper.map(value)
+      }
+    })
     const { _id, ...rest } = data
     return {
       ...rest,
