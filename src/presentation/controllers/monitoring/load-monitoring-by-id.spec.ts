@@ -1,5 +1,5 @@
 
-import { mockMonitoringModel } from '@/domain/tests'
+import { mockDbLoadMonitoringsModel } from '@/data/tests'
 import { LoadMonitoringById } from '@/domain/usecases'
 import { InvalidParamError } from '@/presentation/errors'
 import { serverError, ok, forbidden } from '@/presentation/helpers'
@@ -7,7 +7,7 @@ import { HttpRequest } from '@/presentation/protocols'
 
 import { LoadMonitoringByIdController } from './load-monitoring-by-id'
 
-const monitoringModel = mockMonitoringModel()
+const monitoringModel = mockDbLoadMonitoringsModel()
 
 class LoadMonitoringByIdSpy implements LoadMonitoringById {
   monitoringId: string

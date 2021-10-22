@@ -1,11 +1,11 @@
 import { LoadMonitoringsRepository } from '@/data/protocols'
-import { mockMonitoringModels } from '@/domain/tests'
+import { mockDbLoadMonitoringsResult } from '@/data/tests'
 
 import { DbLoadMonitorings } from './db-load-monitorings'
 
 class LoadMonitoringsRepositorySpy implements LoadMonitoringsRepository {
   callsCount = 0
-  result = mockMonitoringModels()
+  result = mockDbLoadMonitoringsResult()
 
   async loadAll (): Promise<LoadMonitoringsRepository.Result> {
     this.callsCount = this.callsCount + 1
