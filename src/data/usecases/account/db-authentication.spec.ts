@@ -90,6 +90,7 @@ describe('DbAuthentication Usecase', () => {
     const { sut } = makeSut()
     const payload = await sut.auth(mockAuthenticationParams())
     expect(payload).toEqual({
+      id: 'any_id',
       accessToken: 'any_token',
       name: 'any_name',
       role: 'any_role',

@@ -58,6 +58,7 @@ describe('Login Controller', () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(ok({
+      id: 'any_id',
       accessToken: 'any_token',
       name: 'any_name',
     }))

@@ -9,6 +9,7 @@ export namespace Authentication {
   }
 
   export type Result = {
+    id: string
     accessToken: string
     name: string
     role?: string

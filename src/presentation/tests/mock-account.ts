@@ -5,6 +5,7 @@ export const mockAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
     async auth (params: Authentication.Params): Promise<Authentication.Result> {
       return {
+        id: 'any_id',
         accessToken: 'any_token',
         name: mockAccountModel().name,
       }
