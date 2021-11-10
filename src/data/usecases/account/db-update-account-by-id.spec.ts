@@ -55,6 +55,13 @@ describe('DbUpdateAccountById Usecase', () => {
     expect(account).toBe(null)
   })
 
+  it('should throw if LoadAccountByIdRepository throws', async () => {
+    const { sut, loadAccountByIdRepositorySpy } = makeSut()
+    jest.spyOn(loadAccountByIdRepositorySpy, 'loadById').mockReturnValueOnce(Promise.reject(new Error()))
+    const promise = sut.update(mockUpdateAccountByIdParams())
+    await expect(promise).rejects.toThrow()
+  })
+
   it('should call UpdateAccountByIdRepository with correct values', async () => {
     const { sut, updateAccountByIdRepositorySpy } = makeSut()
     const updateAccountByIdParams = mockUpdateAccountByIdParams()
