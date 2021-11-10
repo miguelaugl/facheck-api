@@ -143,4 +143,23 @@ describe('Account Mongo Repository', () => {
       expect(account).toBeFalsy()
     })
   })
+
+  describe('loadById()', () => {
+    it('should load an account on success', async () => {
+      const sut = makeSut()
+      const result = await accountCollection.insertOne({
+        name: 'Miguel Freitas',
+        email: 'any_email@mail.com',
+        password: 'hashed_password',
+        course: 'any_course',
+        cpf: 'any_cpf',
+        ra: 'any_ra',
+      })
+      const account = await sut.loadById(result.insertedId.toString())
+      expect(account).toBeTruthy()
+      expect(account.id).toBeTruthy()
+      expect(account.name).toBe('Miguel Freitas')
+      expect(account.email).toBe('any_email@mail.com')
+    })
+  })
 })
