@@ -48,6 +48,13 @@ describe('DbUpdateAccountById Usecase', () => {
     expect(loadAccountByIdRepositorySpy.accountId).toEqual(updateAccountByIdParams.accountId)
   })
 
+  it('should return null if LoadAccountByIdRepository returns null', async () => {
+    const { sut, loadAccountByIdRepositorySpy } = makeSut()
+    loadAccountByIdRepositorySpy.result = null
+    const account = await sut.update(mockUpdateAccountByIdParams())
+    expect(account).toBe(null)
+  })
+
   it('should call UpdateAccountByIdRepository with correct values', async () => {
     const { sut, updateAccountByIdRepositorySpy } = makeSut()
     const updateAccountByIdParams = mockUpdateAccountByIdParams()
