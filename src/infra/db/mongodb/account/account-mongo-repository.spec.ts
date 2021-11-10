@@ -161,5 +161,19 @@ describe('Account Mongo Repository', () => {
       expect(account.name).toBe('Miguel Freitas')
       expect(account.email).toBe('any_email@mail.com')
     })
+
+    it('should return null if load fails', async () => {
+      const sut = makeSut()
+      await accountCollection.insertOne({
+        name: 'Miguel Freitas',
+        email: 'any_email@mail.com',
+        password: 'hashed_password',
+        course: 'any_course',
+        cpf: 'any_cpf',
+        ra: 'any_ra',
+      })
+      const account = await sut.loadById('618bdd0994dded6d1b0d040d')
+      expect(account).toBe(null)
+    })
   })
 })
