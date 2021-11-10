@@ -176,4 +176,26 @@ describe('Account Mongo Repository', () => {
       expect(account).toBe(null)
     })
   })
+
+  describe('updateById()', () => {
+    it('should update an account on success', async () => {
+      const sut = makeSut()
+      const result = await accountCollection.insertOne({
+        name: 'Miguel Freitas',
+        email: 'any_email@mail.com',
+        password: 'hashed_password',
+        course: 'any_course',
+        cpf: 'any_cpf',
+        ra: 'any_ra',
+      })
+      const accountId = result.insertedId.toString()
+      const account = await sut.updateById(accountId, {
+        name: 'Miguel Augusto',
+      })
+      expect(account).toBeTruthy()
+      expect(account.id).toBeTruthy()
+      expect(account.name).toBe('Miguel Augusto')
+      expect(account.email).toBe('any_email@mail.com')
+    })
+  })
 })
