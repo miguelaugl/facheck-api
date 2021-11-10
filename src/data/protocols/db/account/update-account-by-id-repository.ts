@@ -1,7 +1,7 @@
 import { UpdateAccountById } from '@/domain/usecases'
 
 export interface UpdateAccountByIdRepository {
-  updateById: (data: UpdateAccountByIdRepository.Params) => Promise<UpdateAccountByIdRepository.Result>
+  updateById: (accountId: string, params: UpdateAccountByIdRepository.Params) => Promise<UpdateAccountByIdRepository.Result>
 }
 
 export namespace UpdateAccountByIdRepository {

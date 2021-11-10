@@ -26,7 +26,6 @@ export const mockAuthenticationParams = (): Authentication.Params => ({
 })
 
 export const mockUpdateAccountByIdParams = (): UpdateAccountById.Params => ({
-  accountId: 'any_id',
   name: 'any_name',
   email: 'any_email',
   cpf: 'any_cpf',

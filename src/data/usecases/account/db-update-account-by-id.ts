@@ -7,12 +7,12 @@ export class DbUpdateAccountById implements UpdateAccountById {
     private readonly updateAccountByIdRepository: UpdateAccountByIdRepository,
   ) {}
 
-  async update (data: UpdateAccountById.Params): Promise<UpdateAccountById.Result> {
-    const checkAccount = await this.loadAccountByIdRepository.loadById(data.accountId)
+  async update (accountId: string, params: UpdateAccountById.Params): Promise<UpdateAccountById.Result> {
+    const checkAccount = await this.loadAccountByIdRepository.loadById(accountId)
     if (!checkAccount) {
       return null
     }
-    const account = await this.updateAccountByIdRepository.updateById(data)
+    const account = await this.updateAccountByIdRepository.updateById(accountId, params)
     return account
   }
 }

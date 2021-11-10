@@ -1,9 +1,9 @@
 import { ObjectId } from 'mongodb'
 
-import { AddAccountRepository, LoadAccountByEmailRepository, LoadAccountByIdRepository, LoadAccountByTokenRepository, UpdateAccessTokenRepository } from '@/data/protocols'
+import { AddAccountRepository, LoadAccountByEmailRepository, LoadAccountByIdRepository, LoadAccountByTokenRepository, UpdateAccessTokenRepository, UpdateAccountByIdRepository } from '@/data/protocols'
 import { MongoHelper } from '@/infra/db/mongodb'
 
-export class AccountMongoRepository implements AddAccountRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, LoadAccountByTokenRepository, LoadAccountByIdRepository {
+export class AccountMongoRepository implements AddAccountRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, LoadAccountByTokenRepository, LoadAccountByIdRepository, UpdateAccountByIdRepository {
   async add (accountData: AddAccountRepository.Params): Promise<AddAccountRepository.Result> {
     const accountsCollection = MongoHelper.getCollection('accounts')
     const result = await accountsCollection.insertOne(accountData)
@@ -55,5 +55,15 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
       }],
     })
     return account && MongoHelper.map(account)
+  }
+
+  async updateById (accountId: string, params: UpdateAccountByIdRepository.Params): Promise<UpdateAccountByIdRepository.Result> {
+    const accountsCollection = MongoHelper.getCollection('accounts')
+    await accountsCollection.updateOne({
+      _id: new ObjectId(accountId),
+    }, {
+      $set: params,
+    })
+    return this.loadById(accountId)
   }
 }
