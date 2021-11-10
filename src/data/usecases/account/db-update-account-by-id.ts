@@ -8,7 +8,10 @@ export class DbUpdateAccountById implements UpdateAccountById {
   ) {}
 
   async update (data: UpdateAccountById.Params): Promise<UpdateAccountById.Result> {
-    await this.loadAccountByIdRepository.loadById(data.accountId)
+    const checkAccount = await this.loadAccountByIdRepository.loadById(data.accountId)
+    if (!checkAccount) {
+      return null
+    }
     const account = await this.updateAccountByIdRepository.updateById(data)
     return account
   }
