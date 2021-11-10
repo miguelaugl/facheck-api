@@ -1,4 +1,4 @@
-import { ObjectId } from 'bson'
+import { ObjectId } from 'mongodb'
 
 import { AddMonitoringRepository, LoadMonitoringByIdRepository, LoadMonitoringsRepository } from '@/data/protocols'
 import { MongoHelper } from '@/infra/db/mongodb'
