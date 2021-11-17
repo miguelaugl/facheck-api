@@ -2,10 +2,10 @@ import { Router } from 'express'
 
 import { adaptRoute } from '@/main/adapters'
 import { makeAddMonitoringController, makeLoadMonitoringsController, makeLoadMonitoringByIdController } from '@/main/factories/controllers'
-import { monitorAuth } from '@/main/middlewares'
+import { adminAuth } from '@/main/middlewares'
 
 export default (router: Router): void => {
-  router.post('/monitorings', monitorAuth, adaptRoute(makeAddMonitoringController()))
-  router.get('/monitorings', monitorAuth, adaptRoute(makeLoadMonitoringsController()))
-  router.get('/monitorings/:monitoringId', monitorAuth, adaptRoute(makeLoadMonitoringByIdController()))
+  router.post('/monitorings', adminAuth, adaptRoute(makeAddMonitoringController()))
+  router.get('/monitorings', adaptRoute(makeLoadMonitoringsController()))
+  router.get('/monitorings/:monitoringId', adminAuth, adaptRoute(makeLoadMonitoringByIdController()))
 }

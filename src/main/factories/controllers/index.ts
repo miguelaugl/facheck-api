@@ -1,5 +1,7 @@
 export * from './account/signup-controller-factory'
 export * from './account/login-controller-factory'
+export * from './account/update-account-by-id-factory'
+export * from './account/load-current-account-controller-factory'
 export * from './monitoring/add-monitoring-controller-factory'
 export * from './monitoring/load-monitorings-controller-factory'
 export * from './monitoring/load-monitoring-by-id-controller-factory'

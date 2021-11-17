@@ -1,16 +1,16 @@
-import { UpdateAccountById } from '@/domain/usecases'
+import { LoadAccountById } from '@/domain/usecases'
 import { AccessDeniedError } from '@/presentation/errors'
 import { forbidden, ok, serverError } from '@/presentation/helpers'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 
-export class UpdateAccountByIdController implements Controller {
+export class LoadCurrentAccountController implements Controller {
   constructor (
-    private readonly updateAccountById: UpdateAccountById,
+    private readonly loadAccountById: LoadAccountById,
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const account = await this.updateAccountById.update(httpRequest.accountId, httpRequest.body)
+      const account = await this.loadAccountById.load(httpRequest.accountId)
       if (!account) {
         return forbidden(new AccessDeniedError())
       }

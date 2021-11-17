@@ -1,6 +1,7 @@
 export * from './account/db-add-account'
 export * from './account/db-authentication'
 export * from './account/db-load-account-by-token'
+export * from './account/db-load-account-by-id'
 export * from './monitoring/db-add-monitoring'
 export * from './monitoring/db-load-monitorings'
 export * from './monitoring/db-load-monitoring-by-id'
